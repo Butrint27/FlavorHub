@@ -1,0 +1,14 @@
+.mat-toolbar{
+    background: #C9B59C;
+    color: white;
+}
+
+/* toolbar.component.css */
+.toolbar-logo {
+  color: white; /* same as toolbar text */
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+}
+

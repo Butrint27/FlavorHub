@@ -1,0 +1,43 @@
+.toolbar-buttons {
+  margin-left: auto; /* push to right */
+  display: flex;
+  gap: 12px; /* space between buttons */
+  flex-wrap: wrap; /* allow wrapping if really needed */
+  justify-content: flex-end; /* align to right */
+}
+
+.custom-btn {
+  background-color: #ffffff;
+  color: #D9CFC7;
+  border: 2px solid #D9CFC7;;
+  border-radius: 20px;
+  padding: 10px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap; /* prevent text from breaking */
+  flex-shrink: 0; /* prevent shrinking too much */
+}
+
+.custom-btn:hover {
+  background-color: #EFE9E3;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .custom-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .custom-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
