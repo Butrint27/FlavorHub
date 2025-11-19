@@ -428,6 +428,24 @@ mat-grid-tile {
     width: 120px;
   }
 }
+/* ================================
+   FOOTER TILE
+   ================================ */
+.footer-tile {
+  background-color: #C9B59C !important; /* mat-grid-tile has default background, so use !important */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* Style the text */
+.footer-text {
+  font-family: 'Inter', sans-serif;
+  font-weight: bold;
+  font-size: clamp(16px, 2vw, 32px); /* responsive font size between 16px and 32px */
+  color: #FFFFFF;
+}
 
 
 
