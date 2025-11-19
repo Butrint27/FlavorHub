@@ -1,23 +1,26 @@
+/* ================================
+   TOOLBAR BUTTONS
+   ================================ */
 .toolbar-buttons {
-  margin-left: auto; /* push to right */
+  margin-left: auto;
   display: flex;
-  gap: 12px; /* space between buttons */
-  flex-wrap: wrap; /* allow wrapping if really needed */
-  justify-content: flex-end; /* align to right */
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .custom-btn {
   background-color: #ffffff;
   color: #D9CFC7;
-  border: 2px solid #D9CFC7;;
+  border: 2px solid #D9CFC7;
   border-radius: 20px;
   padding: 10px 24px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  white-space: nowrap; /* prevent text from breaking */
-  flex-shrink: 0; /* prevent shrinking too much */
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .custom-btn:hover {
@@ -26,7 +29,6 @@
   border-color: #ffffff;
 }
 
-/* Responsive tweaks */
 @media (max-width: 768px) {
   .custom-btn {
     padding: 8px 16px;
@@ -42,7 +44,9 @@
 }
 
 
-/* Grid styles */
+/* ================================
+   GRID DEFAULT STYLING
+   ================================ */
 mat-grid-tile {
   background: lightblue;
   border: 1px solid black;
@@ -51,23 +55,24 @@ mat-grid-tile {
 .tile-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;  
+  object-fit: cover;
   display: block;
 }
 
 
-/* Tile design */
+/* ================================
+   HERO TEXT TILE
+   ================================ */
 #tile-backgroundColor {
   background-color: #F9F8F6;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 20px;
+  padding: 40px 20px;
   box-sizing: border-box;
   overflow: hidden;
 }
-
 
 .tile-content {
   width: 100%;
@@ -77,88 +82,57 @@ mat-grid-tile {
 }
 
 
+/* ================================
+   FLUID TEXT (NO OVERFLOW ANYWHERE)
+   ================================ */
 .title {
   font-family: 'Inter', sans-serif;
   font-weight: bold;
-  font-size: 40px;
+  font-size: clamp(20px, 4vw, 32px);
   color: #C9B59C;
   margin: 0 0 15px 0;
   line-height: 1.2;
-  word-break: break-word;
 }
-
 
 .subtitle {
   font-family: 'Inter', sans-serif;
   font-weight: bold;
-  font-size: 36px;
+  font-size: clamp(14px, 3vw, 20px);
   color: #D9CFC7;
   margin: 0 0 25px 0;
   line-height: 1.4;
-  word-break: break-word;
 }
 
 
-.cta-button {
-  font-family: 'Inter', sans-serif;
-  font-weight: bold;
-  font-size: 20px;
-  padding: 10px 25px;
-  background-color: #C9B59C;
-  border: none;
-  border-radius: 6px;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s;
+/* ================================
+   RESPONSIVE FIX FOR GRID OVERFLOW
+   THE MOST IMPORTANT PART
+   ================================ */
+.hero-grid {
+  width: 100%;
 }
 
-.cta-button:hover {
-  background-color: #b89f86;
-}
-
-
-@media (max-width: 1024px) {
-  .tile-content {
-    max-width: 90%;
+@media (max-width: 900px) {
+  .hero-grid {
+    display: block !important;
   }
 
-  .title {
-    font-size: 28px; 
+  .hero-grid mat-grid-tile {
+    height: auto !important;
   }
 
-  .subtitle {
-    font-size: 22px;
-  }
-
-  .cta-button {
-    font-size: 16px;
-    padding: 8px 20px;
-  }
-}
-
-
-@media (max-width: 480px) {
+  /* Move text higher */
   #tile-backgroundColor {
-    padding: 15px 10px;
+    padding: 25px 20px 40px 20px; /* top smaller */
   }
 
-  .tile-content {
-    max-width: 100%;
-  }
-
-  .title {
-    font-size: 22px; 
-  }
-
-  .subtitle {
-    font-size: 18px;
-  }
-
-  .cta-button {
-    font-size: 14px;
-    padding: 6px 16px;
+  .tile-img {
+    height: 260px;
+    object-fit: cover;
   }
 }
+
+
 
 
 
