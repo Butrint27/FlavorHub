@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Italianno&display=swap');
+
+
 /* ================================
    TOOLBAR BUTTONS
    ================================ */
@@ -387,6 +390,42 @@ mat-grid-tile {
   .feature-img {
     width: 35px;
     height: 35px;
+  }
+}
+
+.welcome-container {
+  display: flex;
+  align-items: center;       /* vertical center inside the tile */
+  justify-content: center;   /* horizontal center */
+  gap: 20px;                 /* space between image and text */
+  height: 100%;              /* fill the tile's height */
+  width: 100%;
+  flex-wrap: wrap;           /* wrap on small screens */
+}
+
+.welcome-icon {
+  width: 150px;  /* adjust size as needed */
+  height: auto;
+}
+
+.welcome-title {
+  font-family: 'Italianno', cursive; /* make sure Italianno is loaded */
+  font-weight: 400;
+  font-size: 96px;
+  color: #C9B59C;
+  line-height: 1.1;
+}
+
+@media (max-width: 768px) {
+  .welcome-container {
+    flex-direction: column; /* stack vertically on small screens */
+  }
+  .welcome-title {
+    font-size: 48px;
+    text-align: center;
+  }
+  .welcome-icon {
+    width: 120px;
   }
 }
 
