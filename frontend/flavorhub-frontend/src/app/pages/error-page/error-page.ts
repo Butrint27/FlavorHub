@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { Toolbar } from "../../shared/toolbar/toolbar";
 
 @Component({
   selector: 'app-error-page',
-  imports: [],
+  imports: [Toolbar],
   templateUrl: './error-page.html',
   styleUrl: './error-page.css',
 })
