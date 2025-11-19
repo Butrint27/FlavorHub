@@ -295,32 +295,108 @@ mat-grid-tile {
 
 .tile-zero {
   background-color: #C9B59C;
-  position: relative; 
+  display: flex;           /* center content horizontally */
+  justify-content: center;
+  align-items: center;     /* center content vertically */
 }
 
 .inner-box {
-  position: absolute;
-  top: 5%;
-  bottom: 5%;
-  left: 2%;
-  right: 2%;
   background-color: #EFE9E3;
   border-radius: 10px;
+  padding: 20px;
 
-  display: flex;             /* center text */
-  justify-content: center;   /* horizontally */
-  align-items: center;       /* vertically */
-  text-align: center;        /* center multiple lines */
-  padding: 10px;             /* optional padding for smaller screens */
+  display: flex;
+  justify-content: center;  /* center text horizontally */
+  align-items: center;      /* center text vertically */
+  text-align: center;
+  width: 90%;               /* optional, add margin inside tile */
+  height: 70%;              /* optional, adjust vertical size */
+  box-sizing: border-box;   /* ensures padding doesn't overflow */
 }
 
 .inner-text {
   font-family: 'Inter', sans-serif;
-  font-weight: 700;          /* Bold */
+  font-weight: 700;
   color: #C9B59C;
-  font-size: clamp(18px, 4vw, 48px); /* responsive scaling between 18px and 48px */
+  font-size: clamp(18px, 4vw, 48px); /* responsive scaling */
   line-height: 1.2;
 }
+
+/* ================================
+   FEATURE INLINE TILES
+   ================================ */
+.tile-feature {
+  background-color: #C9B59C;  /* matches tile-zero */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tile-feature-content {
+  display: flex;
+  flex-direction: row;     /* inline layout */
+  align-items: center;
+  justify-content: center;
+  gap: 20px;               /* space between images and text */
+  flex-wrap: nowrap;       /* prevent wrapping */
+}
+
+.feature-img {
+  width: 60px;
+  height: 60px;
+}
+
+.feature-text {
+  font-family: 'Inter', sans-serif;
+  font-style: italic;
+  font-weight: 400;        /* regular */
+  font-size: 48px;
+  color: #FFFFFF;
+  text-align: center;
+  white-space: nowrap;     /* keep text inline */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .feature-text {
+    font-size: 36px;
+  }
+  .feature-img {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 900px) {
+  .feature-text {
+    font-size: 28px;
+  }
+  .feature-img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 600px) {
+  .tile-feature-content {
+    gap: 10px;
+  }
+  .feature-text {
+    font-size: 22px;
+  }
+  .feature-img {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+
+
+
+
+
+
+
 
 
 
