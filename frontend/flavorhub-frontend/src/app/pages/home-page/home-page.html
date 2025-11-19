@@ -5,7 +5,7 @@
   </div>
 </app-toolbar>
 
-
+<!-- HERO SECTION -->
 <mat-grid-list class="hero-grid" cols="2" rowHeight="1.6:1">
   <mat-grid-tile>
     <img class="tile-img" src="assets/front-page-image.jpg" alt="Hero image">
@@ -21,7 +21,7 @@
   </mat-grid-tile>
 </mat-grid-list>
 
-
+<!-- FEATURE ICONS -->
 <mat-grid-list cols="3" rowHeight="2:1" class="feature-grid">
   <mat-grid-tile class="info-tile">
     <div class="tile-content">
@@ -45,12 +45,21 @@
   </mat-grid-tile>
 </mat-grid-list>
 
-
+<!-- STARS + CENTER TEXT -->
 <mat-grid-list cols="1" rowHeight="10:1">
-  <mat-grid-tile>1</mat-grid-tile>
+  <mat-grid-tile [style.background]="'#C9B59C'" class="custom-tile">
+    <div class="content">
+      <img src="assets/star-icon.png" alt="star" class="star">
+      <span class="center-text">
+        Explore the talent of many best cheff's in the world
+      </span>
+      <img src="assets/star-icon.png" alt="star" class="star">
+    </div>
+  </mat-grid-tile>
 </mat-grid-list>
 
-<mat-grid-list cols="3" rowHeight="1:1" >
+<!-- SAMPLE GRID SECTIONS -->
+<mat-grid-list cols="3" rowHeight="1:1">
   <mat-grid-tile>1</mat-grid-tile>
   <mat-grid-tile>2</mat-grid-tile>
   <mat-grid-tile>3</mat-grid-tile>
@@ -71,6 +80,7 @@
 <mat-grid-list cols="1" rowHeight="8:1">
   <mat-grid-tile>1</mat-grid-tile>
 </mat-grid-list>
+
 
 
 
