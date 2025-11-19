@@ -50,7 +50,7 @@
    GRID DEFAULT STYLING
    ================================ */
 mat-grid-tile {
-  border: 1px solid black;
+  border: 1px solid transparent;
 }
 
 .tile-img {
