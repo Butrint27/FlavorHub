@@ -5,9 +5,10 @@
   </div>
 </app-toolbar>
 
+
 <mat-grid-list class="hero-grid" cols="2" rowHeight="1.6:1">
   <mat-grid-tile>
-    <img class="tile-img" src="assets/front-page-image.jpg">
+    <img class="tile-img" src="assets/front-page-image.jpg" alt="Hero image">
   </mat-grid-tile>
 
   <mat-grid-tile id="tile-backgroundColor">
@@ -20,11 +21,30 @@
   </mat-grid-tile>
 </mat-grid-list>
 
-<mat-grid-list cols="3" rowHeight="2:1" >
-  <mat-grid-tile>1</mat-grid-tile>
-  <mat-grid-tile>2</mat-grid-tile>
-  <mat-grid-tile>3</mat-grid-tile>
+
+<mat-grid-list cols="3" rowHeight="2:1" class="feature-grid">
+  <mat-grid-tile class="info-tile">
+    <div class="tile-content">
+      <img src="assets/timer-icon.png" alt="Timer icon">
+      <p>Time to cook</p>
+    </div>
+  </mat-grid-tile>
+
+  <mat-grid-tile class="info-tile">
+    <div class="tile-content">
+      <img src="assets/cooking-icon.png" alt="Cooking icon">
+      <p>Make your dish</p>
+    </div>
+  </mat-grid-tile>
+
+  <mat-grid-tile class="info-tile">
+    <div class="tile-content">
+      <img src="assets/dish-icon.png" alt="Dish icon">
+      <p>Enjoy</p>
+    </div>
+  </mat-grid-tile>
 </mat-grid-list>
+
 
 <mat-grid-list cols="1" rowHeight="10:1">
   <mat-grid-tile>1</mat-grid-tile>
@@ -51,5 +71,6 @@
 <mat-grid-list cols="1" rowHeight="8:1">
   <mat-grid-tile>1</mat-grid-tile>
 </mat-grid-list>
+
 
 

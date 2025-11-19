@@ -43,7 +43,6 @@
   }
 }
 
-
 /* ================================
    GRID DEFAULT STYLING
    ================================ */
@@ -58,7 +57,6 @@ mat-grid-tile {
   object-fit: cover;
   display: block;
 }
-
 
 /* ================================
    HERO TEXT TILE
@@ -81,9 +79,8 @@ mat-grid-tile {
   box-sizing: border-box;
 }
 
-
 /* ================================
-   FLUID TEXT (NO OVERFLOW ANYWHERE)
+   FLUID TEXT HERO
    ================================ */
 .title {
   font-family: 'Inter', sans-serif;
@@ -103,10 +100,8 @@ mat-grid-tile {
   line-height: 1.4;
 }
 
-
 /* ================================
-   RESPONSIVE FIX FOR GRID OVERFLOW
-   THE MOST IMPORTANT PART
+   HERO RESPONSIVE
    ================================ */
 .hero-grid {
   width: 100%;
@@ -121,9 +116,8 @@ mat-grid-tile {
     height: auto !important;
   }
 
-  /* Move text higher */
   #tile-backgroundColor {
-    padding: 25px 20px 40px 20px; /* top smaller */
+    padding: 25px 20px 40px 20px;
   }
 
   .tile-img {
@@ -131,6 +125,70 @@ mat-grid-tile {
     object-fit: cover;
   }
 }
+
+/* ================================
+   FEATURE ICON TILES
+   ================================ */
+.feature-grid {
+  width: 100%;
+}
+
+.info-tile {
+  background-color: #C9B59C !important;
+}
+
+.info-tile .tile-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.info-tile img {
+  width: 80px;
+  height: auto;
+}
+
+.info-tile p {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-weight: bold;
+  font-size: clamp(18px, 3vw, 36px);
+  color: #ffffff;
+  text-align: center;
+}
+
+/* FEATURE TILE RESPONSIVE */
+@media (max-width: 900px) {
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    display: grid !important;
+  }
+
+  .info-tile img {
+    width: 60px;
+  }
+
+  .info-tile p {
+    font-size: clamp(16px, 4vw, 28px);
+  }
+}
+
+@media (max-width: 600px) {
+  .feature-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .info-tile img {
+    width: 50px;
+  }
+
+  .info-tile p {
+    font-size: clamp(14px, 4vw, 24px);
+  }
+}
+
 
 
 
