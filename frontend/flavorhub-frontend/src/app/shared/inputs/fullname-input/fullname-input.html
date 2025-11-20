@@ -1,0 +1,17 @@
+<div class="example-container">
+  <mat-form-field appearance="fill">
+    <mat-label>Fullname</mat-label>
+    <input
+      matInput
+      placeholder="Enter your full name"
+      [(ngModel)]="fullname"
+      required
+    />
+    @if (!fullname || fullname.trim() === '') {
+      
+    }
+  </mat-form-field>
+</div>
+
+
+

@@ -1,0 +1,81 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- Sidenav -->
+  <mat-sidenav #sidenav mode="over" class="custom-sidenav">
+    <div class="sidenav-header">
+      <span class="category-title">Category</span>
+      <hr class="category-line"/>
+    </div>
+
+    <div class="category-checkboxes">
+      <label class="custom-checkbox">All
+        <input type="checkbox">
+        <span class="checkmark"></span>
+      </label>
+      <label class="custom-checkbox">Appetizers
+        <input type="checkbox">
+        <span class="checkmark"></span>
+      </label>
+      <label class="custom-checkbox">Protein
+        <input type="checkbox">
+        <span class="checkmark"></span>
+      </label>
+      <label class="custom-checkbox">Breakfast
+        <input type="checkbox">
+        <span class="checkmark"></span>
+      </label>
+      <label class="custom-checkbox">Desserts
+        <input type="checkbox">
+        <span class="checkmark"></span>
+      </label>
+      <label class="custom-checkbox">Snacks
+        <input type="checkbox">
+        <span class="checkmark"></span>
+      </label>
+    </div>
+  </mat-sidenav>
+
+  <!-- Main Content -->
+  <mat-sidenav-content>
+
+    <mat-toolbar class="custom-toolbar">
+      <button mat-icon-button class="menu-button" aria-label="Menu" (click)="toggleSidenav()">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <a routerLink="/" class="toolbar-logo">FlavorHub</a>
+
+      <span class="toolbar-spacer"></span>
+
+      <!-- Full Name + Avatar -->
+<div class="user-info">
+ <span class="user-name">Jown Doe</span>
+  <div class="avatar-circle" matButton [matMenuTriggerFor]="menu"></div>
+
+  <mat-menu #menu="matMenu" class="custom-menu" xPosition="before" yPosition="below">
+    <div class="menu-content">
+
+      <!-- Menu Items -->
+      <button mat-menu-item>Profile</button>
+      <button mat-menu-item>Repository</button>
+      <button mat-menu-item>Followers</button>
+
+      <!-- Sign Out -->
+      <div class="sign-out-container">
+        <button mat-menu-item color="warn">Sign Out</button>
+      </div>
+    </div>
+  </mat-menu>
+      </div>
+    </mat-toolbar>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,28 @@
+.example-container {
+  width: 90%;          
+  max-width: 500px;    
+  margin: 0 auto;      
+  padding: 0 10px;     
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+/* Tablet */
+@media (min-width: 600px) and (max-width: 1023px) {
+  .example-container {
+    width: 80%;
+    max-width: 450px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .example-container {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+

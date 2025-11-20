@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Toolbar } from "../../shared/toolbar/toolbar";
+import { ToolbarMenu } from "../../shared/toolbar-menu/toolbar-menu";
 
 @Component({
   selector: 'app-main-page',
-  imports: [Toolbar],
+  imports: [ToolbarMenu],
   templateUrl: './main-page.html',
   styleUrl: './main-page.css',
 })
