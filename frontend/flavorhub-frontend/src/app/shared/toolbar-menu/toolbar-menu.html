@@ -55,13 +55,12 @@
     <div class="menu-content">
 
       <!-- Menu Items -->
-      <button mat-menu-item>Profile</button>
-      <button mat-menu-item>Repository</button>
-      <button mat-menu-item>Followers</button>
+      <button mat-menu-item routerLink="/profile">Profile</button>
+      <button mat-menu-item routerLink="/my-repositorys">Repository</button>
 
       <!-- Sign Out -->
       <div class="sign-out-container">
-        <button mat-menu-item color="warn">Sign Out</button>
+        <button mat-menu-item color="warn" routerLink="/login">Sign Out</button>
       </div>
     </div>
   </mat-menu>
