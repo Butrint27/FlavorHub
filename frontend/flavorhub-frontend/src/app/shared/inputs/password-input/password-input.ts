@@ -27,7 +27,6 @@ export class PasswordInput {
   errorMessage = signal('');
 
   constructor() {
-    // Update error message reactively like email
     merge(this.password.statusChanges, this.password.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updateErrorMessage());

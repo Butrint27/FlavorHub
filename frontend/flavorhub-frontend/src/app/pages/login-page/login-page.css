@@ -47,5 +47,29 @@
   font-weight: 600;
 }
 
+.bottom-links {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.bottom-links .link {
+  font-size: 14px;
+  color: #1a73e8; /* Google blue-ish */
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.bottom-links .link:hover {
+  background-color: #e8f0fe; /* subtle highlight */
+  transform: translateY(-2px);
+}
+
 
 

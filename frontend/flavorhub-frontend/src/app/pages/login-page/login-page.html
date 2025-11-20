@@ -1,12 +1,23 @@
 <div class="center-wrapper">
   <div class="parent">
     <div class="child">
-        <h2 class="child-title">Login</h2>
- 
-        <email-input></email-input>
-        <password-input></password-input>
+
+      <h2 class="child-title">Login</h2>
+
+      <email-input></email-input>
+      <password-input></password-input>
+      <app-confirm-button></app-confirm-button>
+
+
+      <div class="bottom-links">
+        <span class="link" (click)="goHome()">Back to Home Page</span>
+        <span class="link" (click)="goRegister()">Don’t have an account? Click here to register</span>
+      </div>
+
+
     </div>
   </div>
 </div>
+
 
 

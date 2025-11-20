@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Italianno&display=swap');
 
 
+
 /* ================================
    TOOLBAR BUTTONS
    ================================ */
@@ -446,6 +447,8 @@ mat-grid-tile {
   font-size: clamp(16px, 2vw, 32px); /* responsive font size between 16px and 32px */
   color: #FFFFFF;
 }
+
+
 
 
 

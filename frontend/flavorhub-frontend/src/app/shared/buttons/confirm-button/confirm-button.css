@@ -1,0 +1,42 @@
+/* Center button */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 2rem 0;
+}
+
+/* Base button */
+.confirm-btn {
+  --bg: #EFE9E3;
+  --border: #C9B59C;
+
+  background-color: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 50px;           /* <-- fixed border radius */
+  padding: 10px 30px;
+
+  /* Override Material default blue text */
+  color: black !important;
+  font-weight: 500;
+
+  transition: all 0.25s ease-in-out;
+}
+
+/* Hover (reverse colors) */
+.confirm-btn:hover {
+  background-color: var(--border);
+  border-color: var(--bg);
+  color: white !important;        /* override Material again */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .confirm-btn {
+    width: 80%;
+    text-align: center;
+  }
+}
+
+
