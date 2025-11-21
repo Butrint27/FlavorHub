@@ -1,1 +1,56 @@
-<app-toolbar-menu></app-toolbar-menu>
+<mat-sidenav-container class="sidenav-container">
+
+  <!-- Sidenav -->
+  <mat-sidenav #sidenav mode="over" class="custom-sidenav">
+    <div class="sidenav-header">
+      <span class="category-title">Category</span>
+      <hr class="category-line"/>
+    </div>
+
+    <div class="category-checkboxes">
+      <label class="custom-checkbox">All
+        <input type="checkbox">
+        <span class="checkmark"></span>
+      </label>
+      <label class="custom-checkbox">Appetizers
+        <input type="checkbox">
+        <span class="checkmark"></span>
+      </label>
+      <label class="custom-checkbox">Protein
+        <input type="checkbox">
+        <span class="checkmark"></span>
+      </label>
+      <label class="custom-checkbox">Breakfast
+        <input type="checkbox">
+        <span class="checkmark"></span>
+      </label>
+      <label class="custom-checkbox">Desserts
+        <input type="checkbox">
+        <span class="checkmark"></span>
+      </label>
+      <label class="custom-checkbox">Snacks
+        <input type="checkbox">
+        <span class="checkmark"></span>
+      </label>
+    </div>
+  </mat-sidenav>
+
+  <!-- Main Content -->
+  <mat-sidenav-content>
+
+    <!-- Toolbar -->
+    <app-toolbar-menu [sidenav]="sidenav"></app-toolbar-menu>
+
+    <!-- Page content -->
+    <div class="main-page-content">
+      <h1>Main Page Content</h1>
+      <p>All your content here is free from being pushed down by the sidenav.</p>
+    </div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+
+
+

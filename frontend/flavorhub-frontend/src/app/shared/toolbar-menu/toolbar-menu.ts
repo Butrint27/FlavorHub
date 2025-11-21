@@ -1,12 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
+import { Component, Input } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
+import { CommonModule } from '@angular/common';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { RouterLink } from "@angular/router";
-import { CommonModule } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-toolbar-menu',
@@ -17,19 +16,18 @@ import { MatMenuModule } from '@angular/material/menu';
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
-    MatSidenavModule,
-    MatListModule,
-    RouterLink,
+    RouterLink
   ],
   templateUrl: './toolbar-menu.html',
-  styleUrls: ['./toolbar-menu.css'],
+  styleUrls: ['./toolbar-menu.css']
 })
 export class ToolbarMenu {
-  @ViewChild('sidenav') sidenav!: MatSidenav;
+  @Input() sidenav!: MatSidenav;
 
   toggleSidenav() {
     this.sidenav.toggle();
   }
 }
+
 
 
