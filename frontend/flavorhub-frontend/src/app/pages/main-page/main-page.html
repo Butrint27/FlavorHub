@@ -41,10 +41,30 @@
     <!-- Toolbar -->
     <app-toolbar-menu [sidenav]="sidenav"></app-toolbar-menu>
 
-    <!-- Page content -->
-    <div class="main-page-content">
-      <h1>Main Page Content</h1>
-      <p>All your content here is free from being pushed down by the sidenav.</p>
+
+    <div class="appetizers-div">
+      <h1>Appetizers</h1>
+      <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page"></mat-paginator>
+    </div>
+
+    <div class="protein-div">
+      <h1>Protein</h1>
+      <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page"></mat-paginator>
+    </div>
+
+    <div class="breakfast-div">
+      <h1>Breakfast</h1>
+      <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page"></mat-paginator>
+    </div>
+
+    <div class="desserts-div">
+      <h1>Desserts</h1>
+      <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page"></mat-paginator>
+    </div>
+
+    <div class="snacks-div">
+      <h1>Snacks</h1>
+      <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page"></mat-paginator>
     </div>
 
   </mat-sidenav-content>

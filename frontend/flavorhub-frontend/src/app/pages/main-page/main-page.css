@@ -1,8 +1,12 @@
+/* --- Import Italianno font for headings --- */
+@import url('https://fonts.googleapis.com/css2?family=Italianno&display=swap');
+
+/* --- Sidenav container --- */
 .sidenav-container {
   height: 100vh;
 }
 
-/* Sidenav styling */
+/* --- Sidenav styling --- */
 .custom-sidenav {
   width: 250px;
   background-color: #C9B59C;
@@ -39,7 +43,7 @@
   gap: 12px;
 }
 
-/* Custom checkboxes */
+/* --- Custom checkboxes --- */
 .custom-checkbox {
   position: relative;
   padding-left: 30px;
@@ -93,10 +97,110 @@
   transform: rotate(45deg);
 }
 
-/* Main page content */
-.main-page-content {
-  padding: 16px;
+/* --- Category divs styling --- */
+.appetizers-div,
+.protein-div,
+.breakfast-div,
+.desserts-div,
+.snacks-div {
+  border: 1px solid black;
+  margin: 32px 0;             /* more vertical spacing between divs */
+  padding: 64px 24px 40px 24px; /* extra top padding for big heading */
+  width: 100%;                
+  display: flex;
+  flex-direction: column;
+  align-items: center;        
+  gap: 24px;                  /* spacing between title and paginator */
+  box-sizing: border-box;
 }
+
+/* --- Headings styling with full-width black line --- */
+.appetizers-div h1,
+.protein-div h1,
+.breakfast-div h1,
+.desserts-div h1,
+.snacks-div h1 {
+  font-family: 'Italianno', cursive;
+  font-weight: 400;           /* regular */
+  color: black;
+  font-size: 128px;           /* very large heading */
+  text-align: center;
+  margin: 0;                  /* remove default margins */
+  width: 100%;
+  position: relative;
+}
+
+/* Full-width black line below heading */
+.appetizers-div h1::after,
+.protein-div h1::after,
+.breakfast-div h1::after,
+.desserts-div h1::after,
+.snacks-div h1::after {
+  content: '';
+  display: block;
+  width: 100%;        /* fill the div */
+  height: 5px;        /* line thickness */
+  background-color: black;
+  margin-top: 24px;   /* more spacing below heading */
+}
+
+/* --- Center the paginator --- */
+mat-paginator {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* --- Responsive adjustments --- */
+@media (max-width: 1024px) {
+  .appetizers-div h1,
+  .protein-div h1,
+  .breakfast-div h1,
+  .desserts-div h1,
+  .snacks-div h1 {
+    font-size: 96px;
+  }
+}
+
+@media (max-width: 768px) {
+  .appetizers-div,
+  .protein-div,
+  .breakfast-div,
+  .desserts-div,
+  .snacks-div {
+    padding: 48px 16px 32px 16px;
+    margin: 24px 0;
+  }
+
+  .appetizers-div h1,
+  .protein-div h1,
+  .breakfast-div h1,
+  .desserts-div h1,
+  .snacks-div h1 {
+    font-size: 72px;
+  }
+}
+
+@media (max-width: 600px) {
+  .appetizers-div,
+  .protein-div,
+  .breakfast-div,
+  .desserts-div,
+  .snacks-div {
+    padding: 32px 16px 24px 16px;
+    margin: 16px 0;
+  }
+
+  .appetizers-div h1,
+  .protein-div h1,
+  .breakfast-div h1,
+  .desserts-div h1,
+  .snacks-div h1 {
+    font-size: 48px;
+  }
+}
+
+
 
 
 
