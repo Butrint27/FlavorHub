@@ -1,1 +1,12 @@
 <app-toolbar-menu></app-toolbar-menu>
+
+<div class="avatar-container">
+  <label for="avatarInput" class="avatar-circle">
+    <img [src]="avatarUrl || 'assets/avatar-placeholder.png'">
+    <span class="plus-icon">+</span>
+  </label>
+  <input type="file" id="avatarInput" (change)="onFileSelected($event)" accept="image/*" hidden>
+</div>
+
+<h1 class="profile-name">John Doe</h1>
+

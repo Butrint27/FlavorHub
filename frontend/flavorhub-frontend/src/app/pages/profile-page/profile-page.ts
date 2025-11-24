@@ -3,10 +3,28 @@ import { ToolbarMenu } from "../../shared/toolbar-menu/toolbar-menu";
 
 @Component({
   selector: 'app-profile-page',
-  imports: [ToolbarMenu],
+  standalone: true,
   templateUrl: './profile-page.html',
-  styleUrl: './profile-page.css',
+  styleUrls: ['./profile-page.css'],
+  imports: [ToolbarMenu],
 })
 export class ProfilePage {
+  avatarUrl: string | ArrayBuffer | null = null;
 
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+
+    const file = input.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.avatarUrl = reader.result;
+    };
+
+    reader.readAsDataURL(file);
+  }
 }
+
+
+
