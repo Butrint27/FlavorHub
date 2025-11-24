@@ -1,0 +1,84 @@
+/* --- Import Italianno font for headings --- */
+@import url('https://fonts.googleapis.com/css2?family=Italianno&display=swap');
+/* --- Import Inter font for button --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap');
+
+:host {
+  display: block;
+  background-color: #F9F8F6;
+  min-height: 100vh;
+}
+
+.title-section {
+  text-align: left; /* align everything to the left */
+  margin-top: 20px;
+  padding-left: 5%; /* slight spacing from left edge */
+}
+
+.repo-title {
+  font-family: 'Italianno', cursive;
+  font-size: 100px;
+  color: black;
+  margin: 0;
+  line-height: 1;
+  font-weight: 400; /* regular */
+}
+
+.title-line {
+  width: 95%; /* keep line shorter */
+  height: 5px;
+  background-color: black;
+  margin: 10px 0 20px 0;
+  border-radius: 4px;
+}
+
+/* --- Add Repository Button --- */
+.add-repo-btn {
+  background-color: #C9B59C;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700; /* Bold */
+  font-size: 20px;  /* smaller size */
+  padding: 10px 28px; /* smaller padding */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-block;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Hover effect */
+.add-repo-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .repo-title {
+    font-size: 72px;
+  }
+
+  .add-repo-btn {
+    font-size: 22px;
+    padding: 8px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .repo-title {
+    font-size: 48px;
+  }
+
+  .add-repo-btn {
+    font-size: 18px;
+    padding: 6px 16px;
+  }
+}
+
+
+
+
+
+
+  

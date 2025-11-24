@@ -103,7 +103,6 @@
 .breakfast-div,
 .desserts-div,
 .snacks-div {
-  border: 1px solid green;
   margin: 32px 0;             /* more vertical spacing between divs */
   padding: 64px 24px 40px 24px; /* extra top padding for big heading */
   width: 100%;                
