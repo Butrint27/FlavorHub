@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ToolbarMenu } from "../../shared/toolbar-menu/toolbar-menu";
 
 @Component({
@@ -9,7 +9,9 @@ import { ToolbarMenu } from "../../shared/toolbar-menu/toolbar-menu";
   imports: [ToolbarMenu],
 })
 export class ProfilePage {
-  avatarUrl: string | ArrayBuffer | null = null;
+  // Use signals for Angular 20 reactivity
+  avatarUrl = signal<string | ArrayBuffer | null>(null);
+  isModalOpen = signal(false);
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -17,14 +19,21 @@ export class ProfilePage {
 
     const file = input.files[0];
     const reader = new FileReader();
-
-    reader.onload = () => {
-      this.avatarUrl = reader.result;
-    };
-
+    reader.onload = () => this.avatarUrl.set(reader.result);
     reader.readAsDataURL(file);
   }
+
+  openModal() {
+    this.isModalOpen.set(true);
+  }
+
+  closeModal() {
+    this.isModalOpen.set(false);
+  }
 }
+
+
+
 
 
 

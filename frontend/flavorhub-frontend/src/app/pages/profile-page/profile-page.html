@@ -1,12 +1,50 @@
 <app-toolbar-menu></app-toolbar-menu>
 
+<!-- Avatar -->
 <div class="avatar-container">
   <label for="avatarInput" class="avatar-circle">
-    <img [src]="avatarUrl || 'assets/avatar-placeholder.png'">
-    <span class="plus-icon">+</span>
+    <img [src]="avatarUrl() || ''">
+    <span class="plus-icon" [hidden]="avatarUrl()">+</span>
   </label>
   <input type="file" id="avatarInput" (change)="onFileSelected($event)" accept="image/*" hidden>
 </div>
 
 <h1 class="profile-name">John Doe</h1>
+
+<!-- Profile Info -->
+<div class="profile-content">
+  <div class="profile-item">
+    <span class="profile-label">Full Name:</span>
+    <span class="profile-value">John Doe</span>
+  </div>
+  <div class="profile-item">
+    <span class="profile-label">Email:</span>
+    <span class="profile-value">johndoe@gmail.com</span>
+  </div>
+  <div class="profile-item">
+    <span class="profile-label">Followers:</span>
+    <span class="profile-value">3200</span>
+  </div>
+  <div class="profile-item">
+    <span class="profile-label">Following:</span>
+    <span class="profile-value">1500</span>
+  </div>
+</div>
+
+<!-- Change Credential Button -->
+<div class="button-container">
+  <button class="change-credential-btn" (click)="openModal()">Change Credential</button>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" *ngIf="isModalOpen()">
+  <div class="modal">
+    <h2>Change Credential</h2>
+    <p>Here you can update your profile information.</p>
+    <button class="close-btn" (click)="closeModal()">Close</button>
+  </div>
+</div>
+
+
+
 
