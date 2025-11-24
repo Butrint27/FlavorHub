@@ -3,8 +3,33 @@
 <div class="title-section">
   <h1 class="repo-title">Repository</h1>
   <div class="title-line"></div>
-  <button class="add-repo-btn">Add Repository</button>
+  <button class="add-repo-btn" (click)="toggleModal()">Add Repository</button>
 </div>
+
+<!-- Modal -->
+<div class="modal-backdrop" [class.show]="modalVisible" (click)="toggleModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+
+       <div class="modal-title">
+
+       </div>   
+
+       <div class="modal-image">
+
+       </div>
+
+       <div class="modal-body">
+
+       </div>
+ </div>
+</div>
+
+
+
+
+
+
+
 
 
 

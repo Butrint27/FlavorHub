@@ -1,6 +1,5 @@
-/* --- Import Italianno font for headings --- */
+/* --- Import fonts --- */
 @import url('https://fonts.googleapis.com/css2?family=Italianno&display=swap');
-/* --- Import Inter font for button --- */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap');
 
 :host {
@@ -10,9 +9,9 @@
 }
 
 .title-section {
-  text-align: left; /* align everything to the left */
+  text-align: left;
   margin-top: 20px;
-  padding-left: 5%; /* slight spacing from left edge */
+  padding-left: 5%;
 }
 
 .repo-title {
@@ -21,60 +20,70 @@
   color: black;
   margin: 0;
   line-height: 1;
-  font-weight: 400; /* regular */
+  font-weight: 400;
 }
 
 .title-line {
-  width: 95%; /* keep line shorter */
+  width: 95%;
   height: 5px;
   background-color: black;
   margin: 10px 0 20px 0;
   border-radius: 4px;
 }
 
-/* --- Add Repository Button --- */
 .add-repo-btn {
   background-color: #C9B59C;
   color: white;
   font-family: 'Inter', sans-serif;
-  font-weight: 700; /* Bold */
-  font-size: 20px;  /* smaller size */
-  padding: 10px 28px; /* smaller padding */
+  font-weight: 700;
+  font-size: 20px;
+  padding: 10px 28px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   display: inline-block;
-  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* Hover effect */
-.add-repo-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+/* --- Modal --- */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 1000;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .repo-title {
-    font-size: 72px;
-  }
-
-  .add-repo-btn {
-    font-size: 22px;
-    padding: 8px 20px;
-  }
+.modal-backdrop.show {
+  display: flex;
 }
 
-@media (max-width: 480px) {
-  .repo-title {
-    font-size: 48px;
-  }
-
-  .add-repo-btn {
-    font-size: 18px;
-    padding: 6px 16px;
-  }
+.modal-content {
+  background-color: #F9F8F6;
+  width: 60%;
+  max-width: 800px;
+  min-width: 300px;
+  height: 40%; /* reduced height */
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
