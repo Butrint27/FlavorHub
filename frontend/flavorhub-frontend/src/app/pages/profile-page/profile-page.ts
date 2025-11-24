@@ -34,6 +34,8 @@ export class ProfilePage {
   closeModal() {
     this.isModalOpen.set(false);
   }
+
+  
 }
 
 

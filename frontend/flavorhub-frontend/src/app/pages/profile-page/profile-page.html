@@ -37,14 +37,35 @@
 </div>
 
 <!-- Modal -->
-<!-- Modal -->
 <div class="modal-backdrop" [style.display]="isModalOpen() ? 'flex' : 'none'">
   <div class="modal">
+    <!-- Top-right X button -->
+    <button class="modal-close" (click)="closeModal()">×</button>
+
     <h2>Change Credential</h2>
-    <p>Here you can update your profile information.</p>
-    <button class="close-btn" (click)="closeModal()">Close</button>
+
+    <div class="field">
+      <label>FullName:</label>
+      <input type="text" placeholder="Enter full name" />
+    </div>
+
+    <div class="field">
+      <label>Email:</label>
+      <input type="email" placeholder="Enter email" />
+    </div>
+
+    <div class="field">
+      <label>Password:</label>
+      <input type="password" placeholder="Enter password" />
+    </div>
+
+    <!-- Confirm button now closes modal too -->
+    <button class="confirm-btn" (click)="closeModal()">Confirm</button>
   </div>
 </div>
+
+
+
 
 
 
