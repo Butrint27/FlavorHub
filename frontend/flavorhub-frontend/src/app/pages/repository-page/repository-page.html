@@ -10,19 +10,30 @@
 <div class="modal-backdrop" [class.show]="modalVisible" (click)="toggleModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
 
+       <!-- Modal Title with Input -->
        <div class="modal-title">
-
+         <input type="text" placeholder="Enter title..." class="modal-title-input" />
        </div>   
 
+       <!-- Modal Image -->
        <div class="modal-image">
-
+         <!-- Image content goes here -->
        </div>
 
+       <!-- Modal Body -->
        <div class="modal-body">
+         <p class="modal-body-text">Ingredience</p>
+         <div class="modal-body-line"></div>
 
+         <div class="chips-wrapper">
+           <app-chips></app-chips>
+         </div>
        </div>
- </div>
+  </div>
 </div>
+
+
+
 
 
 
