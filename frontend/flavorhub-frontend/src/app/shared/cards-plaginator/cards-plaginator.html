@@ -1,0 +1,31 @@
+<div class="slider-wrapper">
+
+  <!-- LEFT ARROW -->
+  <button mat-icon-button class="arrow left" (click)="scrollLeft()">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+
+  <!-- CARD SLIDER -->
+<div class="slider" #slider> 
+    @for (card of cards; track card) { 
+        <mat-card class="slide-card"> <img mat-card-image [src]="card.image" alt="Card image">
+             <mat-card-title>{{ card.title }}</mat-card-title> <mat-card-content> 
+                <p>{{ card.description }}</p> 
+            </mat-card-content> 
+            <mat-card-actions> 
+                <button mat-button>LIKE</button> 
+            </mat-card-actions> 
+        </mat-card> 
+    } 
+</div>
+
+  <!-- RIGHT ARROW -->
+  <button mat-icon-button class="arrow right" (click)="scrollRight()">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+
+</div>
+
+
+
+

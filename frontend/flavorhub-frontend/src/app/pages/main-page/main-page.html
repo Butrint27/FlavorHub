@@ -38,52 +38,34 @@
   <!-- Main Content -->
   <mat-sidenav-content>
 
-    <!-- Toolbar -->
-    <app-toolbar-menu [sidenav]="sidenav"></app-toolbar-menu>
+  <!-- Toolbar -->
+  <app-toolbar-menu [sidenav]="sidenav"></app-toolbar-menu>
 
 
     <div class="appetizers-div">
-      <h1>Appetizers</h1>
-<mat-card class="example-card" appearance="outlined">
-  <mat-card-header>
-    <div mat-card-avatar class="example-header-image"></div>
-    <mat-card-title>Shiba Inu</mat-card-title>
-    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-  </mat-card-header>
-  <img mat-card-image src="https://material.angular.dev/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-  <mat-card-content>
-    <p>
-      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-      bred for hunting.
-    </p>
-  </mat-card-content>
-  <mat-card-actions>
-    <button matButton>LIKE</button>
-    <button matButton>SHARE</button>
-  </mat-card-actions>
-</mat-card>
-      <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page"></mat-paginator>
+       <h1>Appetizers</h1>
+       <app-cards-plaginator></app-cards-plaginator>
     </div>
+
 
     <div class="protein-div">
       <h1>Protein</h1>
-      <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page"></mat-paginator>
+      <app-cards-plaginator></app-cards-plaginator>   
     </div>
 
     <div class="breakfast-div">
       <h1>Breakfast</h1>
-      <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page"></mat-paginator>
+      <app-cards-plaginator></app-cards-plaginator>    
     </div>
 
     <div class="desserts-div">
       <h1>Desserts</h1>
-      <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page"></mat-paginator>
+      <app-cards-plaginator></app-cards-plaginator>  
     </div>
 
     <div class="snacks-div">
-      <h1>Snacks</h1>
-      <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page"></mat-paginator>
+      <h1>Snacks</h1> 
+      <app-cards-plaginator></app-cards-plaginator>  
     </div>
 
   </mat-sidenav-content>

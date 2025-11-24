@@ -103,7 +103,7 @@
 .breakfast-div,
 .desserts-div,
 .snacks-div {
-  border: 1px solid black;
+  border: 1px solid green;
   margin: 32px 0;             /* more vertical spacing between divs */
   padding: 64px 24px 40px 24px; /* extra top padding for big heading */
   width: 100%;                
@@ -200,15 +200,11 @@ mat-paginator {
   }
 }
 
-.example-card {
-  max-width: 400px;
-  margin-top: 20px;
-}
 
-.example-header-image {
-  background-image: url('https://material.angular.dev/assets/img/examples/shiba1.jpg');
-  background-size: cover;
-}
+
+
+
+
 
 
 
