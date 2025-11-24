@@ -1,6 +1,6 @@
-/* --- Import Italianno font --- */
 @import url('https://fonts.googleapis.com/css2?family=Italianno&display=swap');
 
+/* Avatar */
 .avatar-container {
   display: flex;
   flex-direction: column;
@@ -10,8 +10,8 @@
 
 .avatar-circle {
   position: relative;
-  width: 200px;  
-  height: 200px;  
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   background-color: #e0e0e0;
   display: flex;
@@ -47,6 +47,7 @@
   pointer-events: none;
 }
 
+/* Profile name */
 .profile-name {
   font-family: 'Inter', sans-serif;
   font-weight: 700; 
@@ -74,7 +75,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 80px; /* gap between label and value */
+  gap: 80px;
 }
 
 .profile-label, .profile-value {
@@ -110,7 +111,7 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-/* Modal styling */
+/* Modal backdrop */
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -118,12 +119,13 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0,0,0,0.4);
-  display: flex;
-  justify-content: center;
+  justify-content: center; /* keep centering */
   align-items: center;
   z-index: 1000;
 }
 
+
+/* Modal box */
 .modal {
   background-color: #EFE9E3;
   border-radius: 20px;
@@ -164,21 +166,7 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-/* Responsive styles */
-@media (max-width: 1024px) {
-  .profile-content { width: 85%; padding: 35px 25px; gap: 25px; }
-  .profile-item { gap: 50px; }
-  .profile-label, .profile-value { font-size: 36px; }
-  .avatar-circle { width: 180px; height: 180px; }
-  .plus-icon { width: 45px; height: 45px; font-size: 40px; }
-  .profile-name { font-size: 56px; }
-  .change-credential-btn { font-size: 28px; padding: 10px 28px; }
-  .modal { width: 450px; padding: 25px 35px; }
-  .modal h2 { font-size: 32px; }
-  .modal p { font-size: 18px; }
-  .close-btn { font-size: 22px; padding: 8px 20px; }
-}
-
+/* Responsive */
 @media (max-width: 768px) {
   .profile-content { width: 90%; padding: 30px 20px; gap: 20px; }
   .profile-item { gap: 30px; }
@@ -201,11 +189,12 @@
   .plus-icon { width: 36px; height: 36px; font-size: 28px; }
   .profile-name { font-size: 36px; }
   .change-credential-btn { font-size: 24px; padding: 8px 20px; }
-  .modal { width: 90%; padding: 20px 20px; }
+  .modal { width: 90%; padding: 20px; }
   .modal h2 { font-size: 26px; }
   .modal p { font-size: 14px; }
   .close-btn { font-size: 18px; padding: 6px 16px; }
 }
+
 
 
 

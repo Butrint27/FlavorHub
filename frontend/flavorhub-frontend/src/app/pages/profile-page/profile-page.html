@@ -37,13 +37,21 @@
 </div>
 
 <!-- Modal -->
-<div class="modal-backdrop" *ngIf="isModalOpen()">
+<!-- Modal -->
+<div class="modal-backdrop" [style.display]="isModalOpen() ? 'flex' : 'none'">
   <div class="modal">
     <h2>Change Credential</h2>
     <p>Here you can update your profile information.</p>
     <button class="close-btn" (click)="closeModal()">Close</button>
   </div>
 </div>
+
+
+
+
+
+
+
 
 
 

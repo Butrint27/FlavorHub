@@ -9,10 +9,12 @@ import { ToolbarMenu } from "../../shared/toolbar-menu/toolbar-menu";
   imports: [ToolbarMenu],
 })
 export class ProfilePage {
-  // Use signals for Angular 20 reactivity
   avatarUrl = signal<string | ArrayBuffer | null>(null);
+
+  // Modal is hidden by default
   isModalOpen = signal(false);
 
+  // Handle avatar selection
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
@@ -23,14 +25,20 @@ export class ProfilePage {
     reader.readAsDataURL(file);
   }
 
+  // Open modal
   openModal() {
     this.isModalOpen.set(true);
   }
 
+  // Close modal
   closeModal() {
     this.isModalOpen.set(false);
   }
 }
+
+
+
+
 
 
 
