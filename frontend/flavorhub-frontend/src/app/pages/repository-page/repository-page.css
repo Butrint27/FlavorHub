@@ -6,15 +6,15 @@
   display: block;
   background-color: #F9F8F6;
   min-height: 100vh;
+  font-family: 'Inter', sans-serif;
 }
 
-/* --- Title Section --- */
+/* Title Section */
 .title-section {
   text-align: left;
   margin-top: 20px;
   padding-left: 3.5%;
 }
-
 .repo-title {
   font-family: 'Italianno', cursive;
   font-size: 100px;
@@ -23,7 +23,6 @@
   line-height: 1;
   font-weight: 400;
 }
-
 .title-line {
   width: 95%;
   height: 5px;
@@ -31,7 +30,6 @@
   margin: 10px 0 20px 0;
   border-radius: 4px;
 }
-
 .add-repo-btn {
   background-color: #C9B59C;
   color: white;
@@ -43,9 +41,13 @@
   border-radius: 6px;
   cursor: pointer;
   display: inline-block;
+  transition: background-color 0.3s ease;
+}
+.add-repo-btn:hover {
+  background-color: #bfa188;
 }
 
-/* --- Modal --- */
+/* Modal */
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -58,11 +60,9 @@
   background-color: rgba(0,0,0,0.5);
   z-index: 1000;
 }
-
 .modal-backdrop.show {
   display: flex;
 }
-
 .modal-content {
   background-color: #F9F8F6;
   width: 80%;
@@ -75,8 +75,6 @@
   flex-direction: column;
   overflow: hidden;
 }
-
-/* --- Modal Title with Input --- */
 .modal-title {
   background-color: #C9B59C;
   display: flex;
@@ -85,7 +83,6 @@
   padding: 20px;
   flex: 0 0 auto;
 }
-
 .modal-title-input {
   width: 100%;
   max-width: 900px;
@@ -101,20 +98,17 @@
   box-sizing: border-box;
   background-color: #F9F8F6;
 }
-
 .modal-title-input::placeholder {
   color: #666;
   font-weight: 400;
 }
-
-/* --- Modal Image Section --- */
 .modal-image {
   background-color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 300px;
-  max-height: 500px; /* max height of modal */
+  max-height: 500px;
   cursor: pointer;
   border-radius: 12px;
   overflow: hidden;
@@ -123,35 +117,27 @@
   width: 100%;
   position: relative;
 }
-
 .modal-image:hover {
   background-color: #f0f0f0;
 }
-
 .modal-image span {
   color: #999;
   font-family: 'Inter', sans-serif;
   font-weight: 700;
   text-align: center;
 }
-
 .preview-image {
   max-width: 100%;
   max-height: 100%;
-  object-fit: contain; /* keeps aspect ratio */
+  object-fit: contain;
   display: block;
 }
-
-
-
-/* --- Modal Body --- */
 .modal-body {
   background-color: #C9B59C;
   color: white;
   padding: 20px;
   flex: 0 0 auto;
 }
-
 .modal-body-text {
   font-family: 'Inter', sans-serif;
   font-weight: 700;
@@ -160,7 +146,6 @@
   text-align: left;
   margin: 0 0 10px 0;
 }
-
 .modal-body-line {
   width: 100%;
   height: 5px;
@@ -168,16 +153,12 @@
   border-radius: 3px;
   margin-bottom: 20px;
 }
-
-/* --- Dish Type Section --- */
 .dish-type-text {
-  margin-top: 30px; /* distance from previous input */
+  margin-top: 30px;
 }
-
 .dish-type-line {
-  margin-bottom: 15px; /* optional spacing before input */
+  margin-bottom: 15px;
 }
-
 .dish-type-input {
   width: 100%;
   max-width: 900px;
@@ -195,13 +176,10 @@
   vertical-align: top;
   text-align: left;
 }
-
 .dish-type-input::placeholder {
   color: #666;
   font-weight: 400;
 }
-
-/* --- Confirm Button --- */
 .confirm-btn {
   margin-top: 20px;
   width: 100%;
@@ -221,45 +199,117 @@
   margin-right: auto;
   transition: background-color 0.3s ease;
 }
-
 .confirm-btn:hover {
-  background-color: #C0C0C0; /* Slightly darker on hover */
+  background-color: #C0C0C0;
 }
 
-/* --- Responsive adjustments --- */
+/* Cards Container */
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px 3.5%;
+  justify-content: flex-start;
+}
+.repo-card {
+  width: 300px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.repo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+.repo-card mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+}
+.repo-card mat-card-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+.repo-card mat-card-subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(0,0,0,0.6);
+}
+.repo-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #C9B59C;
+}
+.menu-dots {
+  font-size: 22px;
+  cursor: pointer;
+  position: relative;
+}
+.menu-content {
+  display: none;
+  position: absolute;
+  top: 28px;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  flex-direction: column;
+  min-width: 80px;
+  z-index: 100;
+}
+.menu-dots:hover .menu-content {
+  display: flex;
+}
+.menu-content button {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.menu-content button:hover {
+  background-color: #f0f0f0;
+}
+.repo-image {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+}
+.repo-card mat-card-content {
+  padding: 16px;
+  font-size: 14px;
+  color: rgba(0,0,0,0.87);
+  min-height: 60px;
+}
+.repo-card mat-card-actions {
+  display: flex;
+  justify-content: flex-start;
+  padding: 8px 16px;
+}
+.repo-card mat-card-actions button {
+  margin-right: 10px;
+}
 @media (max-width: 768px) {
-  .modal-content {
-    width: 90%;
+  .repo-card {
+    width: 100%;
   }
-
-  .modal-title-input,
-  .dish-type-input {
-    width: 90%;
-    font-size: 16px;
-    height: 35px;
-  }
-
-  .modal-body-text,
-  .dish-type-text {
-    font-size: 32px;
-  }
-
-  .modal-body-line,
-  .dish-type-line {
-    height: 3px;
-  }
-
-  .modal-body,
-  .modal-image {
-    padding: 15px;
-  }
-
-  .confirm-btn {
-    font-size: 16px;
-    padding: 10px 0;
-    max-width: 90%;
+  .repo-image {
+    height: 120px;
   }
 }
+
+
+
+
+
 
 
 

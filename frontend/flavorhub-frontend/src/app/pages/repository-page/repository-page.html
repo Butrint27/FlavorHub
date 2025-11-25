@@ -6,41 +6,65 @@
   <button class="add-repo-btn" (click)="toggleModal()">Add Repository</button>
 </div>
 
-<!-- Modal -->
-<div class="modal-backdrop" [class.show]="modalVisible" (click)="toggleModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
+<!-- Cards -->
+<div class="cards-container">
+  <mat-card class="repo-card" *ngFor="let repo of repos()">
+    <mat-card-header>
+      <div mat-card-avatar class="repo-avatar"></div>
+      <mat-card-title>{{ repo.title }}</mat-card-title>
+      <mat-card-subtitle>{{ repo.dishType }}</mat-card-subtitle>
 
-    <!-- Modal Title -->
+      <div class="menu-dots">
+        &#8942;
+        <div class="menu-content">
+          <button (click)="editRepo(repo)">Edit</button>
+          <button (click)="deleteRepo(repo)">Delete</button>
+        </div>
+      </div>
+    </mat-card-header>
+
+    <img mat-card-image [src]="repo.image" alt="{{ repo.title }}" class="repo-image">
+
+    <mat-card-content>
+      <p>{{ repo.description }}</p>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button color="primary" (click)="likeRepo(repo)">Like {{ repo.likes }}</button>
+      <button mat-button color="warn" (click)="dislikeRepo(repo)">Dislike {{ repo.dislikes }}</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" [class.show]="modalVisible()" (click)="toggleModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-title">
-      <input type="text" placeholder="Enter title..." class="modal-title-input" />
+      <input type="text" placeholder="Enter title..." class="modal-title-input" [value]="title()" (input)="title.set($any($event.target).value)" />
     </div>
 
-    <!-- Modal Image Section -->
     <div class="modal-image" (click)="fileInput.click()">
       <input type="file" #fileInput (change)="onImageSelected($event)" accept="image/*" hidden />
-
-      <!-- Show text if no image -->
-      <span [hidden]="selectedImage">Click anywhere to select an image</span>
-
-      <!-- Show image if selected -->
-      <img [hidden]="!selectedImage" [src]="selectedImage" class="preview-image" />
+      <span [hidden]="selectedImage()">Click to select an image</span>
+      <img [hidden]="!selectedImage()" [src]="selectedImage()" class="preview-image" />
     </div>
 
-    <!-- Modal Body -->
     <div class="modal-body">
       <p class="modal-body-text">Ingredience</p>
       <div class="modal-body-line"></div>
-      <input type="text" placeholder="Enter ingredient..." class="modal-title-input ingredience-input">
+      <input type="text" placeholder="Enter ingredient..." class="modal-title-input ingredience-input" [value]="description()" (input)="description.set($any($event.target).value)" />
 
       <p class="modal-body-text dish-type-text">Dish type</p>
       <div class="modal-body-line dish-type-line"></div>
-      <textarea placeholder="Enter dish type..." class="modal-title-textarea dish-type-input"></textarea>
+      <textarea placeholder="Enter dish type..." class="modal-title-textarea dish-type-input" [value]="dishType()" (input)="dishType.set($any($event.target).value)"></textarea>
 
-      <button class="confirm-btn" (click)="toggleModal()">Confirm</button>
+      <button class="confirm-btn" (click)="confirmRepo()">Confirm</button>
     </div>
-
   </div>
 </div>
+
+
+
 
 
 
