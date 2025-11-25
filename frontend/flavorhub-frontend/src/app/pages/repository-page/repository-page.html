@@ -10,27 +10,40 @@
 <div class="modal-backdrop" [class.show]="modalVisible" (click)="toggleModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
 
-       <!-- Modal Title with Input -->
-       <div class="modal-title">
-         <input type="text" placeholder="Enter title..." class="modal-title-input" />
-       </div>   
+    <!-- Modal Title -->
+    <div class="modal-title">
+      <input type="text" placeholder="Enter title..." class="modal-title-input" />
+    </div>
 
-       <!-- Modal Image -->
-       <div class="modal-image">
-         <!-- Image content goes here -->
-       </div>
+    <!-- Modal Image Section -->
+    <div class="modal-image" (click)="fileInput.click()">
+      <input type="file" #fileInput (change)="onImageSelected($event)" accept="image/*" hidden />
 
-       <!-- Modal Body -->
-       <div class="modal-body">
-         <p class="modal-body-text">Ingredience</p>
-         <div class="modal-body-line"></div>
+      <!-- Show text if no image -->
+      <span [hidden]="selectedImage">Click anywhere to select an image</span>
 
-         <div class="chips-wrapper">
-           <app-chips></app-chips>
-         </div>
-       </div>
+      <!-- Show image if selected -->
+      <img [hidden]="!selectedImage" [src]="selectedImage" class="preview-image" />
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <p class="modal-body-text">Ingredience</p>
+      <div class="modal-body-line"></div>
+      <input type="text" placeholder="Enter ingredient..." class="modal-title-input ingredience-input">
+
+      <p class="modal-body-text dish-type-text">Dish type</p>
+      <div class="modal-body-line dish-type-line"></div>
+      <textarea placeholder="Enter dish type..." class="modal-title-textarea dish-type-input"></textarea>
+
+      <button class="confirm-btn" (click)="toggleModal()">Confirm</button>
+    </div>
+
   </div>
 </div>
+
+
+
 
 
 

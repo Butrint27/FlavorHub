@@ -12,7 +12,7 @@
 .title-section {
   text-align: left;
   margin-top: 20px;
-  padding-left: 5%;
+  padding-left: 3.5%;
 }
 
 .repo-title {
@@ -87,8 +87,8 @@
 }
 
 .modal-title-input {
-  width: 80%;
-  max-width: 600px;
+  width: 100%;
+  max-width: 900px;
   height: 40px;
   padding: 5px 10px;
   font-family: 'Inter', sans-serif;
@@ -99,6 +99,7 @@
   border-radius: 6px;
   outline: none;
   box-sizing: border-box;
+  background-color: #F9F8F6;
 }
 
 .modal-title-input::placeholder {
@@ -106,22 +107,42 @@
   font-weight: 400;
 }
 
-/* --- Modal Image --- */
+/* --- Modal Image Section --- */
 .modal-image {
-  background-color: #F9F8F6;
-  padding: 20px;
+  background-color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 2 1 auto;
-  min-height: 250px;
+  min-height: 300px;
+  max-height: 500px; /* max height of modal */
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 20px;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  position: relative;
 }
 
-.modal-image img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
+.modal-image:hover {
+  background-color: #f0f0f0;
 }
+
+.modal-image span {
+  color: #999;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  text-align: center;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* keeps aspect ratio */
+  display: block;
+}
+
+
 
 /* --- Modal Body --- */
 .modal-body {
@@ -148,48 +169,61 @@
   margin-bottom: 20px;
 }
 
-/* --- Chips Wrapper (Styled like modal-title-input) --- */
-.chips-wrapper {
-  margin-top: 10px;
+/* --- Dish Type Section --- */
+.dish-type-text {
+  margin-top: 30px; /* distance from previous input */
 }
 
-.chips-wrapper .mat-form-field-flex {
-  background-color: #C9B59C;
-  border-radius: 6px;
-  padding: 5px 10px;
+.dish-type-line {
+  margin-bottom: 15px; /* optional spacing before input */
+}
+
+.dish-type-input {
+  width: 100%;
+  max-width: 900px;
+  height: 150px;
+  padding: 10px;
   font-family: 'Inter', sans-serif;
   font-weight: 700;
   font-size: 18px;
   color: black;
-  height: 40px;
+  border: none;
+  border-radius: 6px;
+  outline: none;
   box-sizing: border-box;
+  background-color: #F9F8F6;
+  vertical-align: top;
+  text-align: left;
 }
 
-.chips-wrapper .mat-input-element::placeholder {
+.dish-type-input::placeholder {
   color: #666;
   font-weight: 400;
 }
 
-.chips-wrapper .mat-chip {
-  background-color: white;
+/* --- Confirm Button --- */
+.confirm-btn {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 300px;
+  padding: 12px 0;
+  background-color: #D9D9D9;
   color: black;
   font-family: 'Inter', sans-serif;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 18px;
+  border: none;
   border-radius: 6px;
-  height: 32px;
+  cursor: pointer;
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  transition: background-color 0.3s ease;
 }
 
-.chips-wrapper .mat-chip-remove mat-icon {
-  font-size: 18px;
-}
-
-.chips-wrapper .mat-chip-input-element {
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
-  font-size: 18px;
-  color: black;
-  height: 40px;
+.confirm-btn:hover {
+  background-color: #C0C0C0; /* Slightly darker on hover */
 }
 
 /* --- Responsive adjustments --- */
@@ -198,35 +232,35 @@
     width: 90%;
   }
 
-  .modal-title-input {
+  .modal-title-input,
+  .dish-type-input {
     width: 90%;
     font-size: 16px;
     height: 35px;
   }
 
-  .modal-body-text {
+  .modal-body-text,
+  .dish-type-text {
     font-size: 32px;
   }
 
-  .modal-body-line {
+  .modal-body-line,
+  .dish-type-line {
     height: 3px;
   }
 
-  .modal-body, .modal-image {
+  .modal-body,
+  .modal-image {
     padding: 15px;
   }
 
-  .chips-wrapper .mat-form-field-flex,
-  .chips-wrapper .mat-chip-input-element {
+  .confirm-btn {
     font-size: 16px;
-    height: 35px;
-  }
-
-  .chips-wrapper .mat-chip {
-    font-size: 14px;
-    height: 28px;
+    padding: 10px 0;
+    max-width: 90%;
   }
 }
+
 
 
 
