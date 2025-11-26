@@ -18,6 +18,27 @@
   cursor: pointer;
 }
 
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+}
+
+.avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 2px solid #C9B59C;
+  background-color: transparent;
+  flex-shrink: 0;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
 .card img {
   object-fit: cover;
   max-height: 150px;
@@ -31,6 +52,16 @@
   padding: 10px;
   margin: 0 5px;
 }
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+
+
 
 
 

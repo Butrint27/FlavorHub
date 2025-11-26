@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { RouterModule } from '@angular/router';
 
 interface Card {
   id: number;
@@ -13,6 +14,8 @@ interface Card {
   dishType: string;
   description: string;
   liked?: boolean;
+  avatar?: string;
+  followed?: boolean;
 }
 
 @Component({
@@ -20,7 +23,7 @@ interface Card {
   templateUrl: './cards-plaginator.html',
   styleUrls: ['./cards-plaginator.css'],
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatDialogModule],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatDialogModule, RouterModule],
 })
 export class CardsPlaginator implements OnInit {
   cards: Card[] = Array.from({ length: 16 }, (_, i) => ({
@@ -30,7 +33,9 @@ export class CardsPlaginator implements OnInit {
     ingredients: 'Tomatoes, Cheese, Basil, Olive Oil',
     dishType: 'Italian',
     description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc, eget dapibus orci erat vitae elit. Suspendisse potenti. Sed vulputate sapien ut ligula fermentum, non tincidunt massa pretium. Integer vel lorem vel lectus feugiat consectetur. Curabitur id urna et lectus mattis blandit. Praesent sit amet dolor et turpis dictum ultrices. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec eget sem eget risus tincidunt commodo. Aliquam erat volutpat. Proin eget nulla sed leo lacinia commodo. Quisque ut purus nec nisl venenatis posuere in nec justo. Mauris faucibus, metus a congue facilisis, enim justo sagittis leo, sed tincidunt libero purus at nisl. Sed euismod ligula vitae felis dictum, sed gravida sapien sollicitudin. Etiam id arcu sit amet purus fringilla vestibulum. Curabitur consectetur sapien vitae magna pellentesque, a egestas erat facilisis.`,
-    liked: false
+    liked: false,
+    avatar: 'https://material.angular.dev/assets/img/examples/shiba2.jpg',
+    followed: false
   }));
 
   currentPage = 0;
@@ -83,6 +88,10 @@ export class CardsPlaginator implements OnInit {
     card.liked = !card.liked;
   }
 
+  toggleFollow(card: Card) {
+    card.followed = !card.followed;
+  }
+
   openModal(card: Card) {
     this.dialog.open(CardModal, {
       data: card,
@@ -96,9 +105,11 @@ export class CardsPlaginator implements OnInit {
 @Component({
   selector: 'card-modal',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatDialogModule, MatIconModule],
+  imports: [CommonModule, MatButtonModule, MatDialogModule, MatIconModule, RouterModule],
   template: `
-    <h2>{{data.title}}</h2>
+    <div class="modal-header">
+      <h2>{{data.title}}</h2>
+    </div>
     <img [src]="data.image" alt="Dish Image" class="modal-image">
     <p><strong>Ingredients:</strong> {{data.ingredients}}</p>
     <p><strong>Dish Type:</strong> {{data.dishType}}</p>
@@ -110,10 +121,25 @@ export class CardsPlaginator implements OnInit {
           {{ data.liked ? 'favorite' : 'favorite_border' }}
         </mat-icon>
       </button>
-      <button mat-button color="primary" (click)="close()">Close</button>
+      <button mat-button color="primary" (click)="toggleFollow()">
+        {{ data.followed ? 'Following' : 'Follow' }}
+      </button>
+      <button mat-button color="accent" (click)="close()">Close</button>
     </div>
   `,
   styles: [`
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    img.avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
     img.modal-image {
       width: 100%;
       max-height: 300px;
@@ -121,7 +147,7 @@ export class CardsPlaginator implements OnInit {
       margin-bottom: 15px;
       border-radius: 8px;
     }
-    h2 { margin-top: 0; }
+    h2 { margin: 0; }
     p { margin: 5px 0; }
 
     .modal-description {
@@ -148,9 +174,12 @@ export class CardModal {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<CardModal>
   ) {}
+
   close() { this.dialogRef.close(); }
   toggleLike() { this.data.liked = !this.data.liked; }
+  toggleFollow() { this.data.followed = !this.data.followed; }
 }
+
 
 
 
