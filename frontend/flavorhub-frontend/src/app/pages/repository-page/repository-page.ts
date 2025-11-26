@@ -11,7 +11,6 @@ interface Repo {
   ingredience: string;
   description: string;
   likes: number;
-  dislikes: number;
   showMenu?: boolean; // needed for the dropdown
 }
 
@@ -61,7 +60,6 @@ export class RepositoryPage {
         dishType: this.dishType(),
         description: this.description(),
         likes: Math.floor(Math.random() * 100),
-        dislikes: Math.floor(Math.random() * 100),
         showMenu: false,
       },
       ...this.repos(),
@@ -72,11 +70,6 @@ export class RepositoryPage {
 
   likeRepo(repo: Repo) {
     repo.likes++;
-    this.repos.set([...this.repos()]);
-  }
-
-  dislikeRepo(repo: Repo) {
-    repo.dislikes++;
     this.repos.set([...this.repos()]);
   }
 
@@ -126,6 +119,7 @@ export class RepositoryPage {
     this.selectedImage.set(null);
   }
 }
+
 
 
 

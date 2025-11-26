@@ -44,19 +44,17 @@
       <p class="description-textarea">{{ repo.description }}</p>
     </div>
 
-    <!-- Likes / Dislikes -->
+    <!-- Likes Only -->
     <div class="likes-container">
       <button class="like-btn" (click)="likeRepo(repo)">👍 {{ repo.likes }}</button>
-      <button class="dislike-btn" (click)="dislikeRepo(repo)">👎 {{ repo.dislikes }}</button>
     </div>
 
   </div>
 </div>
 
-
 <!-- Modal -->
-<div class="modal-backdrop" [class.show]="modalVisible()" (click)="toggleModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
+<div class="modal-backdrop" [class.show]="modalVisible()">
+  <div class="modal-content">
     
     <!-- Title -->
     <div class="modal-title">
@@ -79,23 +77,30 @@
       <input type="text" placeholder="Enter ingredient..." class="modal-title-input ingredience-input"
              [value]="ingredience()" (input)="ingredience.set($any($event.target).value)" />
 
-      <!-- Dish Type (now input) -->
+      <!-- Dish Type -->
       <p class="modal-body-text dish-type-text">Dish type</p>
       <div class="modal-body-line dish-type-line"></div>
       <input type="text" placeholder="Enter dish type..." class="modal-title-input ingredience-input"
              [value]="dishType()" (input)="dishType.set($any($event.target).value)" />
 
-      <!-- Description (NEW textarea) -->
+      <!-- Description -->
       <p class="modal-body-text description-text">Description</p>
       <div class="modal-body-line description-line"></div>
       <textarea placeholder="Enter description..." class="modal-title-textarea description-input"
                 [value]="description()" (input)="description.set($any($event.target).value)">
       </textarea>
 
-      <button class="confirm-btn" (click)="confirmRepo()">Confirm</button>
+      <!-- Action Buttons -->
+      <div class="modal-buttons">
+        <button class="close-btn" (click)="toggleModal()">Close</button>
+        <button class="confirm-btn" (click)="confirmRepo()">Confirm</button>
+      </div>
+
     </div>
   </div>
 </div>
+
+
 
 
 
