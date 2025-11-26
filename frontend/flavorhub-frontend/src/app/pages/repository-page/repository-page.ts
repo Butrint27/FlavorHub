@@ -1,5 +1,5 @@
-import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common'; // <-- needed for *ngFor, *ngIf, etc.
+import { Component, HostListener, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { ToolbarMenu } from "../../shared/toolbar-menu/toolbar-menu";
@@ -8,9 +8,11 @@ interface Repo {
   title: string;
   image: string | ArrayBuffer | null;
   dishType: string;
+  ingredience: string;
   description: string;
   likes: number;
   dislikes: number;
+  showMenu?: boolean; // needed for the dropdown
 }
 
 @Component({
@@ -27,9 +29,9 @@ export class RepositoryPage {
   // form signals
   title = signal('');
   dishType = signal('');
+  ingredience = signal('');
   description = signal('');
 
-  // cards array
   repos = signal<Repo[]>([]);
 
   toggleModal() {
@@ -43,25 +45,26 @@ export class RepositoryPage {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = () => {
-      this.selectedImage.set(reader.result);
-    };
+    reader.onload = () => this.selectedImage.set(reader.result);
     reader.readAsDataURL(file);
   }
 
   confirmRepo() {
-    if (!this.title() || !this.selectedImage() || !this.dishType() || !this.description()) return;
+    if (!this.title() || !this.selectedImage() || !this.ingredience() || !this.dishType() || !this.description())
+      return;
 
     this.repos.set([
       {
         title: this.title(),
         image: this.selectedImage(),
+        ingredience: this.ingredience(),
         dishType: this.dishType(),
         description: this.description(),
         likes: Math.floor(Math.random() * 100),
         dislikes: Math.floor(Math.random() * 100),
+        showMenu: false,
       },
-      ...this.repos(), // newest on top
+      ...this.repos(),
     ]);
 
     this.toggleModal();
@@ -77,26 +80,54 @@ export class RepositoryPage {
     this.repos.set([...this.repos()]);
   }
 
-  editRepo(repo: Repo) {
+  toggleMenu(event: Event, repo: Repo) {
+    event.stopPropagation();
+
+    // Close all other menus
+    this.repos().forEach(r => {
+      if (r !== repo) r.showMenu = false;
+    });
+
+    repo.showMenu = !repo.showMenu;
+    this.repos.set([...this.repos()]);
+  }
+
+  @HostListener('document:click')
+  closeAllMenus() {
+    this.repos().forEach(r => r.showMenu = false);
+    this.repos.set([...this.repos()]);
+  }
+
+  editRepo(event: Event, repo: Repo) {
+    event.stopPropagation();
+
     this.title.set(repo.title);
     this.selectedImage.set(repo.image);
+    this.ingredience.set(repo.ingredience);
     this.dishType.set(repo.dishType);
     this.description.set(repo.description);
+
     this.toggleModal();
+    repo.showMenu = false;
     this.repos.set(this.repos().filter(r => r !== repo));
   }
 
-  deleteRepo(repo: Repo) {
+  deleteRepo(event: Event, repo: Repo) {
+    event.stopPropagation();
+
     this.repos.set(this.repos().filter(r => r !== repo));
   }
 
   resetForm() {
     this.title.set('');
     this.dishType.set('');
+    this.ingredience.set('');
     this.description.set('');
     this.selectedImage.set(null);
   }
 }
+
+
 
 
 

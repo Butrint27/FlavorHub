@@ -68,23 +68,18 @@
   width: 80%;
   max-width: 800px;
   min-width: 300px;
-  height: auto;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 .modal-title {
   background-color: #C9B59C;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   padding: 20px;
-  flex: 0 0 auto;
+  text-align: center;
 }
 .modal-title-input {
-  width: 100%;
+  width: 98%;
   max-width: 900px;
   height: 40px;
   padding: 5px 10px;
@@ -95,56 +90,40 @@
   border: none;
   border-radius: 6px;
   outline: none;
-  box-sizing: border-box;
   background-color: #F9F8F6;
 }
-.modal-title-input::placeholder {
-  color: #666;
-  font-weight: 400;
-}
+
 .modal-image {
   background-color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 300px;
-  max-height: 500px;
+  min-height: 200px;
+  max-height: 400px; /* prevent too tall images */
   cursor: pointer;
   border-radius: 12px;
   overflow: hidden;
   margin: 20px;
-  transition: background-color 0.3s ease;
-  width: 100%;
+  width: 95%;
   position: relative;
 }
-.modal-image:hover {
-  background-color: #f0f0f0;
-}
-.modal-image span {
-  color: #999;
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
-  text-align: center;
-}
+
 .preview-image {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  max-width: 20%;
+  max-height: 90%;
+  object-fit: contain; /* maintain aspect ratio */
   display: block;
 }
+
 .modal-body {
   background-color: #C9B59C;
-  color: white;
   padding: 20px;
-  flex: 0 0 auto;
 }
 .modal-body-text {
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
   font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 10px;
   color: white;
-  text-align: left;
-  margin: 0 0 10px 0;
 }
 .modal-body-line {
   width: 100%;
@@ -153,158 +132,178 @@
   border-radius: 3px;
   margin-bottom: 20px;
 }
-.dish-type-text {
-  margin-top: 30px;
-}
-.dish-type-line {
-  margin-bottom: 15px;
-}
+
+.ingredience-input,
 .dish-type-input {
-  width: 100%;
-  max-width: 900px;
-  height: 150px;
-  padding: 10px;
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
-  font-size: 18px;
-  color: black;
+  width: 98%;
+  height: 40px;
+  padding: 5px 10px;
+  background-color: #F9F8F6;
   border: none;
   border-radius: 6px;
   outline: none;
-  box-sizing: border-box;
-  background-color: #F9F8F6;
-  vertical-align: top;
-  text-align: left;
 }
-.dish-type-input::placeholder {
-  color: #666;
-  font-weight: 400;
-}
-.confirm-btn {
-  margin-top: 20px;
+
+.description-textarea {
   width: 100%;
-  max-width: 300px;
+  height: 80px;                  /* fixed height */
+  padding: 10px;                 /* keep text inside */
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;        /* include padding in width/height */
+  overflow-y: auto;              /* vertical scrollbar inside the box */
+  overflow-x: hidden;            /* prevent horizontal overflow */
+  word-wrap: break-word;         /* wrap long words */
+  white-space: pre-wrap;         /* preserve line breaks */
+  font-size: 14px;
+  color: #555;
+
+  display: block;                /* ensures proper block layout */
+}
+
+
+.description-line {
+  margin-bottom: 15px;
+}
+
+.description-input {
+  width: 98%;
+  height: 150px;
+  padding: 10px;
+  background-color: #F9F8F6;
+  border: none;
+  border-radius: 6px;
+  outline: none;
+  resize: none;
+}
+
+.confirm-btn {
+  display: block;
+  width: 300px;        /* fixed width so margin:auto can center it */
+  max-width: 90%;      /* keeps it responsive on small screens */
+  margin: 20px auto 0; /* center horizontally, space on top */
   padding: 12px 0;
   background-color: #D9D9D9;
   color: black;
-  font-family: 'Inter', sans-serif;
   font-weight: 700;
-  font-size: 18px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   text-align: center;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  transition: background-color 0.3s ease;
 }
 .confirm-btn:hover {
   background-color: #C0C0C0;
 }
 
-/* Cards Container */
+
+/* Cards */
 .cards-container {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px 3.5%;
-  justify-content: flex-start;
 }
+
 .repo-card {
   width: 300px;
-  background-color: #fff;
+  background: white;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.repo-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-}
-.repo-card mat-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 16px;
-}
-.repo-card mat-card-title {
-  font-size: 18px;
-  font-weight: 600;
-}
-.repo-card mat-card-subtitle {
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(0,0,0,0.6);
-}
-.repo-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #C9B59C;
-}
-.menu-dots {
-  font-size: 22px;
-  cursor: pointer;
+  padding-bottom: 15px;
   position: relative;
 }
-.menu-content {
-  display: none;
-  position: absolute;
-  top: 28px;
-  right: 0;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  flex-direction: column;
-  min-width: 80px;
-  z-index: 100;
+
+.card-title {
+  padding: 15px;
+  font-size: 22px;
+  font-weight: 700;
 }
-.menu-dots:hover .menu-content {
-  display: flex;
-}
-.menu-content button {
-  background: none;
-  border: none;
-  text-align: left;
-  padding: 8px 12px;
-  font-size: 14px;
-  cursor: pointer;
-}
-.menu-content button:hover {
-  background-color: #f0f0f0;
-}
+
 .repo-image {
   width: 100%;
   height: 140px;
   object-fit: cover;
-  display: block;
 }
-.repo-card mat-card-content {
-  padding: 16px;
+
+.card-section {
+  padding: 10px 15px;
+}
+
+.section-label {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.section-text {
   font-size: 14px;
-  color: rgba(0,0,0,0.87);
-  min-height: 60px;
+  color: #555;
 }
-.repo-card mat-card-actions {
+
+/* Likes section */
+.likes-container {
   display: flex;
-  justify-content: flex-start;
-  padding: 8px 16px;
+  justify-content: space-between;
+  padding: 10px 15px;
 }
-.repo-card mat-card-actions button {
-  margin-right: 10px;
+
+.like-btn,
+.dislike-btn {
+  border: none;
+  background: #EEE;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
 }
-@media (max-width: 768px) {
-  .repo-card {
-    width: 100%;
-  }
-  .repo-image {
-    height: 120px;
-  }
+
+.like-btn:hover,
+.dislike-btn:hover {
+  background: #ddd;
 }
+
+/* Three dots menu */
+.dots-wrapper {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.dots-btn {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.dots-menu {
+  position: absolute;
+  right: 0;
+  top: 30px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  overflow: hidden;
+  z-index: 99;
+}
+
+.menu-item {
+  width: 120px;
+  padding: 10px;
+  text-align: left;
+  background: white;
+  border: none;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: #F0F0F0;
+}
+
+
+
+
 
 
 
