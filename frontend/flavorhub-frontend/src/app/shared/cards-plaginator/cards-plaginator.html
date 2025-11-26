@@ -1,30 +1,46 @@
-<div class="slider-wrapper">
-
-  <!-- LEFT ARROW -->
-  <button mat-icon-button class="arrow left" (click)="scrollLeft()">
+<div class="carousel">
+  <button class="arrow" (click)="prevPage()" [disabled]="currentPage === 0">
     <mat-icon>chevron_left</mat-icon>
   </button>
 
-  <!-- CARD SLIDER -->
-<div class="slider" #slider> 
-    @for (card of cards; track card) { 
-        <mat-card class="slide-card"> <img mat-card-image [src]="card.image" alt="Card image">
-             <mat-card-title>{{ card.title }}</mat-card-title> <mat-card-content> 
-                <p>{{ card.description }}</p> 
-            </mat-card-content> 
-            <mat-card-actions> 
-                <button mat-button>LIKE</button> 
-            </mat-card-actions> 
-        </mat-card> 
-    } 
-</div>
+  <div class="cards-wrapper">
+    <mat-card class="card" *ngFor="let card of visibleCards" (click)="openModal(card)">
+      <mat-card-title>{{card.title}}</mat-card-title>
+      <img mat-card-image [src]="card.image" alt="Dish Image">
+      <mat-card-content>
+        <p><strong>Ingredients:</strong> {{card.ingredients}}</p>
+        <p><strong>Dish Type:</strong> {{card.dishType}}</p>
+        <p><strong>Description:</strong> {{card.description | slice:0:60}}...</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-icon-button (click)="toggleLike(card); $event.stopPropagation()">
+          <mat-icon [color]="card.liked ? 'warn' : ''">
+            {{ card.liked ? 'favorite' : 'favorite_border' }}
+          </mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
 
-  <!-- RIGHT ARROW -->
-  <button mat-icon-button class="arrow right" (click)="scrollRight()">
+  <button class="arrow" (click)="nextPage()" [disabled]="currentPage === totalPages - 1">
     <mat-icon>chevron_right</mat-icon>
   </button>
-
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
