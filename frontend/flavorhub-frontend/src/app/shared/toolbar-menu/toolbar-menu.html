@@ -1,28 +1,30 @@
 <mat-toolbar class="custom-toolbar">
+  <!-- Menu button -->
   <button mat-icon-button class="menu-button" aria-label="Menu" (click)="toggleSidenav()">
     <mat-icon>menu</mat-icon>
   </button>
 
+  <!-- Logo -->
   <a routerLink="/" class="toolbar-logo">FlavorHub</a>
 
   <span class="toolbar-spacer"></span>
 
+  <!-- User Info -->
   <div class="user-info">
     <span class="user-name">John Doe</span>
     <div class="avatar-circle" matButton [matMenuTriggerFor]="menu"></div>
 
-    <mat-menu #menu="matMenu" class="custom-menu" xPosition="before" yPosition="below">
-      <div class="menu-content">
-        <button mat-menu-item routerLink="/main-page">Main page</button>
-        <button mat-menu-item routerLink="/profile">Profile</button>
-        <button mat-menu-item routerLink="/my-repositorys">Repository</button>
-        <div class="sign-out-container">
-          <button mat-menu-item color="warn" routerLink="/login">Sign Out</button>
-        </div>
-      </div>
+    <mat-menu #menu="matMenu" xPosition="before" yPosition="below">
+      <button mat-menu-item routerLink="/main-page">Main page</button>
+      <button mat-menu-item routerLink="/profile">Profile</button>
+      <button mat-menu-item routerLink="/my-repositorys">Repository</button>
+      <button mat-menu-item color="warn" routerLink="/login">Sign Out</button>
     </mat-menu>
   </div>
 </mat-toolbar>
+
+
+
 
 
 

@@ -9,27 +9,44 @@
 
     <div class="category-checkboxes">
       <label class="custom-checkbox">All
-        <input type="checkbox">
+        <input type="checkbox" 
+               [checked]="isChecked('All')" 
+               (change)="toggleCategory('All')">
         <span class="checkmark"></span>
       </label>
+
       <label class="custom-checkbox">Appetizers
-        <input type="checkbox">
+        <input type="checkbox" 
+               [checked]="isChecked('Appetizers')" 
+               (change)="toggleCategory('Appetizers')">
         <span class="checkmark"></span>
       </label>
+
       <label class="custom-checkbox">Protein
-        <input type="checkbox">
+        <input type="checkbox" 
+               [checked]="isChecked('Protein')" 
+               (change)="toggleCategory('Protein')">
         <span class="checkmark"></span>
       </label>
+
       <label class="custom-checkbox">Breakfast
-        <input type="checkbox">
+        <input type="checkbox" 
+               [checked]="isChecked('Breakfast')" 
+               (change)="toggleCategory('Breakfast')">
         <span class="checkmark"></span>
       </label>
+
       <label class="custom-checkbox">Desserts
-        <input type="checkbox">
+        <input type="checkbox" 
+               [checked]="isChecked('Desserts')" 
+               (change)="toggleCategory('Desserts')">
         <span class="checkmark"></span>
       </label>
+
       <label class="custom-checkbox">Snacks
-        <input type="checkbox">
+        <input type="checkbox" 
+               [checked]="isChecked('Snacks')" 
+               (change)="toggleCategory('Snacks')">
         <span class="checkmark"></span>
       </label>
     </div>
@@ -38,38 +55,40 @@
   <!-- Main Content -->
   <mat-sidenav-content>
 
-  <!-- Toolbar -->
-  <app-toolbar-menu [sidenav]="sidenav"></app-toolbar-menu>
+    <!-- Toolbar remains full width -->
+    <app-toolbar-menu [sidenav]="sidenav"></app-toolbar-menu>
 
+    <!-- Centered category divs -->
+    <div class="categories-wrapper">
+      <div class="appetizers-div" [style.display]="getDisplay('Appetizers')">
+         <h1>Appetizers</h1>
+         <app-cards-plaginator></app-cards-plaginator>
+      </div>
 
-    <div class="appetizers-div">
-       <h1>Appetizers</h1>
-       <app-cards-plaginator></app-cards-plaginator>
-    </div>
+      <div class="protein-div" [style.display]="getDisplay('Protein')">
+        <h1>Protein</h1>
+        <app-cards-plaginator></app-cards-plaginator>   
+      </div>
 
+      <div class="breakfast-div" [style.display]="getDisplay('Breakfast')">
+        <h1>Breakfast</h1>
+        <app-cards-plaginator></app-cards-plaginator>    
+      </div>
 
-    <div class="protein-div">
-      <h1>Protein</h1>
-      <app-cards-plaginator></app-cards-plaginator>   
-    </div>
+      <div class="desserts-div" [style.display]="getDisplay('Desserts')">
+        <h1>Desserts</h1>
+        <app-cards-plaginator></app-cards-plaginator>  
+      </div>
 
-    <div class="breakfast-div">
-      <h1>Breakfast</h1>
-      <app-cards-plaginator></app-cards-plaginator>    
-    </div>
-
-    <div class="desserts-div">
-      <h1>Desserts</h1>
-      <app-cards-plaginator></app-cards-plaginator>  
-    </div>
-
-    <div class="snacks-div">
-      <h1>Snacks</h1> 
-      <app-cards-plaginator></app-cards-plaginator>  
+      <div class="snacks-div" [style.display]="getDisplay('Snacks')">
+        <h1>Snacks</h1> 
+        <app-cards-plaginator></app-cards-plaginator> 
+      </div>
     </div>
 
   </mat-sidenav-content>
 </mat-sidenav-container>
+
 
 
 

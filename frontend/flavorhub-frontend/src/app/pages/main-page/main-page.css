@@ -1,4 +1,3 @@
-/* --- Import Italianno font for headings --- */
 @import url('https://fonts.googleapis.com/css2?family=Italianno&display=swap');
 
 /* --- Sidenav container --- */
@@ -97,38 +96,48 @@
   transform: rotate(45deg);
 }
 
+/* --- Wrapper to center divs, toolbar unaffected --- */
+.categories-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 /* --- Category divs styling --- */
 .appetizers-div,
 .protein-div,
 .breakfast-div,
 .desserts-div,
 .snacks-div {
-  margin: 32px 0;             /* more vertical spacing between divs */
-  padding: 64px 24px 40px 24px; /* extra top padding for big heading */
-  width: 100%;                
+  margin: 32px 0;
+  padding: 64px 24px 40px 24px;
+  max-width: 1200px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;        
-  gap: 24px;                  /* spacing between title and paginator */
+  align-items: center;
+  gap: 24px;
   box-sizing: border-box;
 }
 
-/* --- Headings styling with full-width black line --- */
+/* --- Headings styling --- */
 .appetizers-div h1,
 .protein-div h1,
 .breakfast-div h1,
 .desserts-div h1,
 .snacks-div h1 {
   font-family: 'Italianno', cursive;
-  font-weight: 400;           /* regular */
+  font-weight: 400;
   color: black;
-  font-size: 128px;           /* very large heading */
+  font-size: 128px;
   text-align: center;
-  margin: 0;                  /* remove default margins */
-  width: 100%;
+  margin: 0 auto;
   position: relative;
 }
 
+/* Full-width black line below heading */
 /* Full-width black line below heading */
 .appetizers-div h1::after,
 .protein-div h1::after,
@@ -137,13 +146,17 @@
 .snacks-div h1::after {
   content: '';
   display: block;
-  width: 100%;        /* fill the div */
-  height: 5px;        /* line thickness */
+  width: 90vw;       /* full viewport width */
+  height: 5px;        /* thickness */
   background-color: black;
-  margin-top: 24px;   /* more spacing below heading */
+  margin: 24px auto 0 auto;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-/* --- Center the paginator --- */
+
+/* --- Center paginator --- */
 mat-paginator {
   display: flex;
   justify-content: center;
@@ -198,6 +211,7 @@ mat-paginator {
     font-size: 48px;
   }
 }
+
 
 
 
