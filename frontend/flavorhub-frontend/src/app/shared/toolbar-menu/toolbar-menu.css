@@ -1,3 +1,4 @@
+/* ---------------- Toolbar Base ---------------- */
 .custom-toolbar {
   background-color: #C9B59C;
   color: white;
@@ -5,6 +6,7 @@
   align-items: center;
   padding: 0 16px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative; /* for absolute search */
 }
 
 .menu-button {
@@ -43,12 +45,88 @@
   font-weight: 600;
 }
 
+/* ---------------- Desktop Search Bar ---------------- */
+.search-container {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 4px 12px;
+  width: 300px;
+  max-width: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+
+  position: absolute;  /* center horizontally */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.search-icon {
+  color: black;
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-style: italic;
+  font-weight: bold;
+  color: black;
+  background: transparent;
+  font-size: 14px;
+}
+
+/* ---------------- Mobile Search Bar ---------------- */
+.mobile-search-container {
+  display: none; /* hidden on desktop */
+}
+
 @media (max-width: 500px) {
+  /* Hide desktop search bar on mobile */
+  .search-container {
+    display: none;
+  }
+
+  /* Show mobile search below toolbar */
+  .mobile-search-container {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 6px 12px;
+    margin: 8px 16px; /* spacing from edges */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+
+  .mobile-search-container .search-icon {
+    color: black;
+    font-size: 20px;
+    margin-right: 8px;
+  }
+
+  .mobile-search-container .search-input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-style: italic;
+    font-weight: bold;
+    color: black;
+    background: transparent;
+    font-size: 12px;
+  }
+
+  /* Shrink avatar */
   .avatar-circle {
     width: 32px;
     height: 32px;
   }
 }
+
+
+
+
 
 
 
