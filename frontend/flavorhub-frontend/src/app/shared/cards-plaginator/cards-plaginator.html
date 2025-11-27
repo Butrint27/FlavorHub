@@ -5,28 +5,29 @@
 
   <div class="cards-wrapper">
     <mat-card class="card" *ngFor="let card of visibleCards" (click)="openModal(card)">
-      <!-- Custom header for avatar + title -->
+
       <div class="card-header">
         <div class="avatar" routerLink="/profile"></div>
         <div class="card-title">{{ card.title }}</div>
       </div>
 
-      <!-- Card image -->
       <img mat-card-image [src]="card.image" alt="Dish Image">
 
-      <!-- Card content -->
       <mat-card-content>
         <p><strong>Ingredients:</strong> {{card.ingredients}}</p>
         <p><strong>Dish Type:</strong> {{card.dishType}}</p>
         <p><strong>Description:</strong> {{card.description | slice:0:60}}...</p>
       </mat-card-content>
 
-      <!-- Actions: Like + Follow -->
       <mat-card-actions class="actions">
         <button mat-icon-button (click)="toggleLike(card); $event.stopPropagation()">
           <mat-icon [color]="card.liked ? 'warn' : ''">
             {{ card.liked ? 'favorite' : 'favorite_border' }}
           </mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="openComments(card); $event.stopPropagation()">
+          <mat-icon>chat_bubble</mat-icon>
         </button>
 
         <button mat-button color="primary" (click)="toggleFollow(card); $event.stopPropagation()">
@@ -40,6 +41,7 @@
     <mat-icon>chevron_right</mat-icon>
   </button>
 </div>
+
 
 
 
