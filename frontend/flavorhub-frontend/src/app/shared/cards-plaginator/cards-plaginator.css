@@ -30,8 +30,6 @@
   height: 35px;
   border-radius: 50%;
   border: 2px solid #C9B59C;
-  background-color: transparent;
-  flex-shrink: 0;
 }
 
 .card-title {
@@ -45,19 +43,19 @@
   border-radius: 6px;
 }
 
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .arrow {
   background: white;
   border: none;
   cursor: pointer;
   padding: 10px;
-  margin: 0 5px;
 }
 
-.actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
 
 
 

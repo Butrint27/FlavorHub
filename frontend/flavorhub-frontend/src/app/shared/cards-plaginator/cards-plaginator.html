@@ -1,9 +1,11 @@
 <div class="carousel">
+
   <button class="arrow" (click)="prevPage()" [disabled]="currentPage === 0">
     <mat-icon>chevron_left</mat-icon>
   </button>
 
   <div class="cards-wrapper">
+
     <mat-card class="card" *ngFor="let card of visibleCards" (click)="openModal(card)">
 
       <div class="card-header">
@@ -11,7 +13,7 @@
         <div class="card-title">{{ card.title }}</div>
       </div>
 
-      <img mat-card-image [src]="card.image" alt="Dish Image">
+      <img mat-card-image [src]="card.image">
 
       <mat-card-content>
         <p><strong>Ingredients:</strong> {{card.ingredients}}</p>
@@ -20,27 +22,36 @@
       </mat-card-content>
 
       <mat-card-actions class="actions">
+
+        <!-- like -->
         <button mat-icon-button (click)="toggleLike(card); $event.stopPropagation()">
           <mat-icon [color]="card.liked ? 'warn' : ''">
             {{ card.liked ? 'favorite' : 'favorite_border' }}
           </mat-icon>
         </button>
 
+        <!-- comments -->
         <button mat-icon-button (click)="openComments(card); $event.stopPropagation()">
-          <mat-icon>chat_bubble</mat-icon>
+          <mat-icon>comment</mat-icon>
         </button>
 
+        <!-- follow -->
         <button mat-button color="primary" (click)="toggleFollow(card); $event.stopPropagation()">
           {{ card.followed ? 'Following' : 'Follow' }}
         </button>
+
       </mat-card-actions>
+
     </mat-card>
+
   </div>
 
   <button class="arrow" (click)="nextPage()" [disabled]="currentPage === totalPages - 1">
     <mat-icon>chevron_right</mat-icon>
   </button>
+
 </div>
+
 
 
 
