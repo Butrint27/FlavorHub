@@ -23,11 +23,13 @@ import { RouterLink } from '@angular/router';
 })
 export class ToolbarMenu {
   @Input() sidenav!: MatSidenav;
+  @Input() showMenuButton: boolean = true; // ✅ new input
 
   toggleSidenav() {
     this.sidenav.toggle();
   }
 }
+
 
 
 

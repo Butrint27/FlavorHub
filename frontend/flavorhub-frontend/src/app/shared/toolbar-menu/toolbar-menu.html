@@ -1,6 +1,7 @@
 <mat-toolbar class="custom-toolbar">
-  <!-- Menu button -->
-  <button mat-icon-button class="menu-button" aria-label="Menu" (click)="toggleSidenav()">
+
+  <!-- Menu button only if showMenuButton is true -->
+  <button *ngIf="showMenuButton" mat-icon-button class="menu-button" aria-label="Menu" (click)="toggleSidenav()">
     <mat-icon>menu</mat-icon>
   </button>
 
@@ -29,11 +30,12 @@
   </div>
 </mat-toolbar>
 
-<!-- Mobile Search Bar (below toolbar) -->
+<!-- Mobile Search Bar -->
 <div class="mobile-search-container">
   <mat-icon class="search-icon">search</mat-icon>
   <input type="text" placeholder="Search..." class="search-input" />
 </div>
+
 
 
 
