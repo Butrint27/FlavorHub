@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { FollowersController } from './followers.controller';
 import { FollowersService } from './followers.service';
+import { FollowersController } from './followers.controller';
 
 @Module({
   controllers: [FollowersController],
-  providers: [FollowersService]
+  providers: [FollowersService],
 })
 export class FollowersModule {}

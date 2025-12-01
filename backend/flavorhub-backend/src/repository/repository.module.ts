@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { RepositoryController } from './repository.controller';
 import { RepositoryService } from './repository.service';
+import { RepositoryController } from './repository.controller';
 
 @Module({
   controllers: [RepositoryController],
-  providers: [RepositoryService]
+  providers: [RepositoryService],
 })
 export class RepositoryModule {}
