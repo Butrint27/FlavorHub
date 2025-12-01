@@ -15,7 +15,7 @@ export class User {
   password: string;
 
   @Column({ type: 'longblob', nullable: true })
-  avatar: Buffer;
+  avatar?: Buffer;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

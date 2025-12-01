@@ -6,29 +6,42 @@ import {
   Patch,
   Param,
   Delete,
+  UploadedFile,
+  UseInterceptors,
+  Res,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import express from 'express';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
+  @UseInterceptors(FileInterceptor('avatar'))
+  async create(
+    @Body() createUserDto: CreateUserDto,
+    @UploadedFile() avatar?: Express.Multer.File,
+  ) {
     try {
-      await this.userService.create(createUserDto);
+      const user = await this.userService.create({
+        ...createUserDto,
+        avatar: avatar?.buffer,
+      });
 
       return {
         success: true,
         message: 'User Created Successfully',
+        data: user,
       };
-    } catch {
-      return {
-        success: false,
-        message: 'Error Creating User',
-      };
+    } catch (err) {
+      console.error(err);
+      throw new HttpException('Error Creating User', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -39,13 +52,9 @@ export class UserController {
       return {
         success: true,
         data,
-        message: 'User Fetched Successfully',
       };
     } catch {
-      return {
-        success: false,
-        message: 'Error Fetching Users',
-      };
+      throw new HttpException('Error Fetching Users', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -56,29 +65,49 @@ export class UserController {
       return {
         success: true,
         data,
-        message: 'User Fetched Successfully',
       };
     } catch {
-      return {
-        success: false,
-        message: 'Error Fetching User',
-      };
+      throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
+    }
+  }
+
+  // Return avatar image as binary
+  @Get(':id/avatar')
+  async getAvatar(@Param('id') id: string, @Res() res: express.Response) {
+    try {
+      const user = await this.userService.findOne(+id);
+      if (!user.avatar) {
+        throw new HttpException('Avatar not found', HttpStatus.NOT_FOUND);
+      }
+
+      res.setHeader('Content-Type', 'image/png'); // or detect dynamically
+      res.send(user.avatar);
+    } catch (err) {
+      console.error(err);
+      throw new HttpException('Avatar not found', HttpStatus.NOT_FOUND);
     }
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  @UseInterceptors(FileInterceptor('avatar'))
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @UploadedFile() avatar?: Express.Multer.File,
+  ) {
     try {
-      await this.userService.update(+id, updateUserDto);
+      const user = await this.userService.update(+id, {
+        ...updateUserDto,
+        avatar: avatar?.buffer,
+      });
       return {
         success: true,
         message: 'User Updated Successfully',
+        data: user,
       };
-    } catch {
-      return {
-        success: false,
-        message: 'Error Updating User',
-      };
+    } catch (err) {
+      console.error(err);
+      throw new HttpException('Error Updating User', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -91,10 +120,8 @@ export class UserController {
         message: 'User Deleted Successfully',
       };
     } catch {
-      return {
-        success: false,
-        message: 'Error Deleting User',
-      };
+      throw new HttpException('Error Deleting User', HttpStatus.BAD_REQUEST);
     }
   }
 }
+
