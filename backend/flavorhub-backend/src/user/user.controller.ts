@@ -18,6 +18,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import express from 'express';
 
+
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -123,5 +124,6 @@ export class UserController {
       throw new HttpException('Error Deleting User', HttpStatus.BAD_REQUEST);
     }
   }
+
 }
 

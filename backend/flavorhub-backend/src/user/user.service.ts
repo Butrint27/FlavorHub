@@ -48,4 +48,5 @@ export class UserService {
     const existingUser = await this.findOne(id);
     return await this.userRepository.remove(existingUser);
   }
+
 }
