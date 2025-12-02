@@ -17,6 +17,8 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import express from 'express';
+import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
 
 
 @Controller('user')
@@ -124,6 +126,34 @@ export class UserController {
       throw new HttpException('Error Deleting User', HttpStatus.BAD_REQUEST);
     }
   }
+
+  @Post('register')
+  async register(@Body() dto: RegisterDto) {
+    try {
+      await this.userService.register(dto);
+      return {
+        success: true,
+        message: 'User Registered Successfully',
+      };
+    } catch (error) {
+      throw new HttpException('Error Registering User', HttpStatus.BAD_REQUEST);
+   }
+  }
+
+ @Post('login')
+ async login(@Body() dto: LoginDto) {
+  try {
+    const tokens = await this.userService.login(dto);
+    return {
+      success: true,
+      message: 'User Logged In Successfully',
+      tokens, // <-- return tokens to frontend
+    };
+  } catch (error) {
+    throw new HttpException('Error Logging In', HttpStatus.BAD_REQUEST);
+  }
+}
+
 
 }
 
