@@ -1,3 +1,5 @@
+require('tsconfig-paths/register');
+
 import { DataSource } from 'typeorm';
 
 export default new DataSource({

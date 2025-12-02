@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Repository } from 'src/repository/entities/repository.entity';
 
 @Entity()
 export class User {
@@ -29,4 +30,7 @@ export class User {
 
   @Column({ nullable: true })
   refreshToken?: string;
+
+  @OneToMany(() => Repository, (repository) => repository.user)
+  repository: Repository[]
 }

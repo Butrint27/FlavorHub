@@ -1,26 +1,60 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository as TypeOrmRepository } from 'typeorm';
+import { Repository } from './entities/repository.entity';
 import { CreateRepositoryDto } from './dto/create-repository.dto';
 import { UpdateRepositoryDto } from './dto/update-repository.dto';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class RepositoryService {
-  create(createRepositoryDto: CreateRepositoryDto) {
-    return 'This action adds a new repository';
+  constructor(
+    @InjectRepository(Repository)
+    private readonly repoRepo: TypeOrmRepository<Repository>,
+
+    @InjectRepository(User)
+    private readonly userRepo: TypeOrmRepository<User>,
+  ) {}
+
+  async create(createDto: CreateRepositoryDto): Promise<Repository> {
+    const user = await this.userRepo.findOne({ where: { id: createDto.userId } });
+    if (!user) throw new NotFoundException('User not found');
+
+    const repo = this.repoRepo.create({
+      ...createDto,
+      user,
+    });
+
+    return this.repoRepo.save(repo);
   }
 
-  findAll() {
-    return `This action returns all repository`;
+  async findAll(): Promise<Repository[]> {
+    return this.repoRepo.find({ relations: ['user'] });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} repository`;
+  async findOne(id: number): Promise<Repository> {
+    const repo = await this.repoRepo.findOne({ where: { id }, relations: ['user'] });
+    if (!repo) throw new NotFoundException('Repository not found');
+    return repo;
   }
 
-  update(id: number, updateRepositoryDto: UpdateRepositoryDto) {
-    return `This action updates a #${id} repository`;
+  async update(id: number, updateDto: UpdateRepositoryDto): Promise<Repository> {
+    const repo = await this.findOne(id);
+
+    if (updateDto.userId) {
+      const user = await this.userRepo.findOne({ where: { id: updateDto.userId } });
+      if (!user) throw new NotFoundException('User not found');
+      repo.user = user;
+    }
+
+    Object.assign(repo, updateDto);
+    return this.repoRepo.save(repo);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} repository`;
+  async remove(id: number): Promise<void> {
+    const repo = await this.findOne(id);
+    await this.repoRepo.remove(repo);
   }
 }
+
+
