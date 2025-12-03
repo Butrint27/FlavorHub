@@ -8,8 +8,8 @@ export class FollowersController {
   constructor(private readonly followersService: FollowersService) {}
 
   @Post()
-  create(@Body() createFollowerDto: CreateFollowerDto) {
-    return this.followersService.create(createFollowerDto);
+  create(@Body() dto: CreateFollowerDto) {
+    return this.followersService.create(dto);
   }
 
   @Get()
@@ -23,8 +23,8 @@ export class FollowersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFollowerDto: UpdateFollowerDto) {
-    return this.followersService.update(+id, updateFollowerDto);
+  update(@Param('id') id: string, @Body() dto: UpdateFollowerDto) {
+    return this.followersService.update(+id, dto);
   }
 
   @Delete(':id')
@@ -32,3 +32,5 @@ export class FollowersController {
     return this.followersService.remove(+id);
   }
 }
+
+

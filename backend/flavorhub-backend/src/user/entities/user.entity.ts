@@ -1,5 +1,8 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Repository } from 'src/repository/entities/repository.entity';
+import { Like } from 'src/likes/entities/like.entity';
+import { Comment } from 'src/comments/entities/comment.entity';
+import { Follower } from 'src/followers/entities/follower.entity';
 
 @Entity()
 export class User {
@@ -33,4 +36,16 @@ export class User {
 
   @OneToMany(() => Repository, (repository) => repository.user)
   repository: Repository[]
+
+  @OneToMany(() => Like, (like) => like.user)
+  like: Like[]
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comment: Comment[]
+
+  @OneToMany(() => Follower, (follower) => follower.followsUser)
+  followers: Follower[];
+
+  @OneToMany(() => Follower, (follower) => follower.user)
+  following: Follower[];
 }

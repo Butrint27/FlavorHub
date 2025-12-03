@@ -1,5 +1,7 @@
 import { User } from "src/user/entities/user.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import { Like } from "src/likes/entities/like.entity";
+import { Comment } from "src/comments/entities/comment.entity";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity()
 export class Repository {
@@ -33,5 +35,11 @@ export class Repository {
     onUpdate: 'CURRENT_TIMESTAMP',
    })
    updatedAt: Date;
+
+   @OneToMany(() => Like, (like) => like.repository)
+   like: Like[]
+
+   @OneToMany(() => Comment, (comment) => comment.repository)
+   comment: Comment[]
 
 }
