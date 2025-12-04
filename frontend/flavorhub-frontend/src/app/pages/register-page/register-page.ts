@@ -6,26 +6,31 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { merge } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthService } from '../../services/auth.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSnackBarModule
+  ],
   templateUrl: './register-page.html',
   styleUrls: ['./register-page.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterPage {
-  constructor(private router: Router) {
-    merge(this.password.statusChanges, this.password.valueChanges)
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => this.updatePasswordError());
-    merge(this.email.statusChanges, this.email.valueChanges)
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => this.updateEmailError());
-  }
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private snackBar: MatSnackBar
+  ) {}
 
   // Form Controls
   fullname = new FormControl('', [Validators.required]);
@@ -78,13 +83,40 @@ export class RegisterPage {
   }
 
   register() {
-    // Placeholder for actual registration logic
-    console.log('Registering:', this.fullname.value, this.email.value, this.password.value);
+    // Update error messages
     this.updateFullnameError();
     this.updateEmailError();
     this.updatePasswordError();
+
+    if (this.fullname.invalid || this.email.invalid || this.password.invalid) {
+      return;
+    }
+
+    // Call AuthService
+    this.authService
+      .register({
+        fullName: this.fullname.value as string,
+        email: this.email.value as string,
+        password: this.password.value as string,
+      })
+      .subscribe({
+        next: (res) => {
+          this.snackBar.open('Registration successful!', 'Close', {
+            duration: 3000,
+            panelClass: ['success-snackbar'],
+          });
+          this.router.navigate(['/login']);
+        },
+        error: (err) => {
+          this.snackBar.open('Registration failed. Try again.', 'Close', {
+            duration: 3000,
+            panelClass: ['error-snackbar'],
+          });
+        },
+      });
   }
 }
+
 
 
 
