@@ -5,7 +5,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service'; // 👈 adjust the path if needed
 
 @Component({
   selector: 'app-toolbar-menu',
@@ -23,12 +24,23 @@ import { RouterLink } from '@angular/router';
 })
 export class ToolbarMenu {
   @Input() sidenav!: MatSidenav;
-  @Input() showMenuButton: boolean = true; // ✅ new input
+  @Input() showMenuButton: boolean = true;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   toggleSidenav() {
     this.sidenav.toggle();
   }
+
+  logout() {
+    this.authService.logout();   // 🗑 remove JWT + user
+    this.router.navigate(['/login']); // 🔄 redirect to login
+  }
 }
+
 
 
 

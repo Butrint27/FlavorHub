@@ -25,7 +25,7 @@
       <button mat-menu-item routerLink="/main-page">Main page</button>
       <button mat-menu-item routerLink="/profile">Profile</button>
       <button mat-menu-item routerLink="/my-repositorys">Repository</button>
-      <button mat-menu-item color="warn" routerLink="/login">Sign Out</button>
+      <button mat-menu-item color="warn" (click)="logout()">Sign Out</button>
     </mat-menu>
   </div>
 </mat-toolbar>
