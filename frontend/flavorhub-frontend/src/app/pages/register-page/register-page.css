@@ -17,7 +17,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: transparent;
 }
 
 .parent {
@@ -35,18 +34,59 @@
   width: 80%;
   height: 80%;
   border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px;
 }
 
 .child-title {
   text-align: center;
   font-size: 28px;
-  margin: 10;
   margin-bottom: 20px;
   font-weight: 600;
 }
 
+.child mat-form-field {
+  width: 80%;
+  margin: 0 auto;
+  display: block;
+}
+
+.child mat-form-field + mat-form-field {
+  margin-top: 16px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 2rem 0;
+}
+
+.register-btn {
+  --bg: #EFE9E3;
+  --border: #C9B59C;
+  background-color: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 50px;
+  padding: 10px 30px;
+  color: black !important;
+  font-weight: 500;
+  transition: all 0.25s ease-in-out;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.register-btn:hover {
+  background-color: var(--border);
+  border-color: var(--bg);
+  color: white !important;
+}
+
 .bottom-links {
-  margin-top: 30px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -68,5 +108,32 @@
   background-color: #e8f0fe;
   transform: translateY(-2px);
 }
+
+.success-snackbar {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+.error-snackbar {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+@media (max-width: 1024px) {
+  .parent {
+    width: 500px;
+    height: auto;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .parent {
+    width: 90%;
+    height: auto;
+  }
+}
+
+
 
 

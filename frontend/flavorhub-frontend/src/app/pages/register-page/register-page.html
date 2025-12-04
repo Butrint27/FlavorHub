@@ -1,20 +1,78 @@
 <div class="center-wrapper">
   <div class="parent">
     <div class="child">
-
       <h2 class="child-title">Register</h2>
 
-      <fullname-input></fullname-input>
-      <email-input></email-input>
-      <password-input></password-input>
-      <app-register-button></app-register-button>
+      <!-- Fullname Input -->
+      <mat-form-field appearance="fill">
+        <mat-label>Fullname</mat-label>
+        <input
+          matInput
+          placeholder="Enter your full name"
+          [formControl]="fullname"
+          (blur)="updateFullnameError()"
+          required
+        />
+        @if (fullname.invalid) {
+          <mat-error>{{ fullnameError() }}</mat-error>
+        }
+      </mat-form-field>
 
+      <!-- Email Input -->
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="email"
+          placeholder="pat@example.com"
+          [formControl]="email"
+          (blur)="updateEmailError()"
+          required
+        />
+        @if (email.invalid) {
+          <mat-error>{{ emailError() }}</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Password Input -->
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="hidePassword() ? 'password' : 'text'"
+          [formControl]="password"
+          (blur)="updatePasswordError()"
+          required
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="togglePasswordVisibility($event)"
+          [attr.aria-label]="'Toggle password visibility'"
+          [attr.aria-pressed]="hidePassword()"
+        >
+          <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (password.invalid) {
+          <mat-error>{{ passwordError() }}</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Register Button -->
+      <section class="container">
+        <button mat-button class="register-btn" (click)="register()">Register</button>
+      </section>
+
+      <!-- Bottom Links -->
       <div class="bottom-links">
         <span class="link" (click)="goLogin()">Already registered? Click here to login</span>
       </div>
-
     </div>
   </div>
 </div>
+
+
+
+
 
 

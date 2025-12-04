@@ -18,3 +18,4 @@ export class FullnameInput {
     return 'Fullname is required';
   }
 }
+
