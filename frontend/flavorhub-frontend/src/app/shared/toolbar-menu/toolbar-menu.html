@@ -1,6 +1,6 @@
 <mat-toolbar class="custom-toolbar">
 
-  <!-- Menu button only if showMenuButton is true -->
+  <!-- Menu button -->
   <button *ngIf="showMenuButton" mat-icon-button class="menu-button" aria-label="Menu" (click)="toggleSidenav()">
     <mat-icon>menu</mat-icon>
   </button>
@@ -8,7 +8,7 @@
   <!-- Logo -->
   <a routerLink="/" class="toolbar-logo">FlavorHub</a>
 
-  <!-- Desktop Search Bar -->
+  <!-- Desktop Search -->
   <div class="search-container">
     <mat-icon class="search-icon">search</mat-icon>
     <input type="text" placeholder="Search..." class="search-input" />
@@ -18,10 +18,13 @@
 
   <!-- User Info -->
   <div class="user-info">
-    <span class="user-name">
-     {{ currentUser?.fullName || 'Guest' }}
-    </span>
-    <div class="avatar-circle" matButton [matMenuTriggerFor]="menu"></div>
+    <span class="user-name">{{ currentUser?.fullName || 'Guest' }}</span>
+
+    <!-- Avatar Circle -->
+    <div class="avatar-circle" [matMenuTriggerFor]="menu">
+      <img *ngIf="avatarUrl" [src]="avatarUrl" alt="Avatar">
+      <mat-icon *ngIf="!avatarUrl">person</mat-icon>
+    </div>
 
     <mat-menu #menu="matMenu" xPosition="before" yPosition="below">
       <button mat-menu-item routerLink="/main-page">Main page</button>
@@ -32,11 +35,13 @@
   </div>
 </mat-toolbar>
 
-<!-- Mobile Search Bar -->
+<!-- Mobile Search -->
 <div class="mobile-search-container">
   <mat-icon class="search-icon">search</mat-icon>
   <input type="text" placeholder="Search..." class="search-input" />
 </div>
+
+
 
 
 

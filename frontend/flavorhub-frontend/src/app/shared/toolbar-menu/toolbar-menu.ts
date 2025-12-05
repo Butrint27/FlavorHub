@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth.service'; // 👈 adjust the path if needed
+import { AuthService, DecodedToken } from '../../services/auth.service';
 
 @Component({
   selector: 'app-toolbar-menu',
@@ -22,10 +22,12 @@ import { AuthService } from '../../services/auth.service'; // 👈 adjust the pa
   templateUrl: './toolbar-menu.html',
   styleUrls: ['./toolbar-menu.css']
 })
-export class ToolbarMenu {
+export class ToolbarMenu implements OnInit {
   @Input() sidenav!: MatSidenav;
   @Input() showMenuButton: boolean = true;
-  currentUser: any;
+
+  currentUser: DecodedToken | null = null;
+  avatarUrl: string | null = null;
 
   constructor(
     private authService: AuthService,
@@ -33,14 +35,14 @@ export class ToolbarMenu {
   ) {}
 
   ngOnInit() {
-    const storedUser = localStorage.getItem('current_user');
+    this.currentUser = this.authService.getUser();
 
-    if (storedUser) {
-      try {
-        this.currentUser = JSON.parse(storedUser);
-      } catch (e) {
-        console.error('Invalid current_user JSON in localStorage');
-      }
+    if (this.currentUser) {
+      // Fetch avatar from backend
+      this.authService.getAvatar(this.currentUser.sub).subscribe({
+        next: (base64) => this.avatarUrl = base64,
+        error: () => console.log('No avatar found')
+      });
     }
   }
 
@@ -49,10 +51,12 @@ export class ToolbarMenu {
   }
 
   logout() {
-    this.authService.logout();   // 🗑 remove JWT + user
-    this.router.navigate(['/login']); // 🔄 redirect to login
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
+
+
 
 
 
