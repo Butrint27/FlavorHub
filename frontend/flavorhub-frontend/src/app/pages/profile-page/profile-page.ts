@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { ToolbarMenu } from "../../shared/toolbar-menu/toolbar-menu";
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -8,35 +9,100 @@ import { ToolbarMenu } from "../../shared/toolbar-menu/toolbar-menu";
   styleUrls: ['./profile-page.css'],
   imports: [ToolbarMenu],
 })
-export class ProfilePage {
+export class ProfilePage implements OnInit {
   avatarUrl = signal<string | ArrayBuffer | null>(null);
+  fullName = signal('');
+  email = signal('');
 
-  // Modal is hidden by default
   isModalOpen = signal(false);
+  selectedFile: File | null = null;
 
-  // Handle avatar selection
-  onFileSelected(event: Event): void {
+  constructor(private authService: AuthService) {}
+
+  ngOnInit() {
+    const user = this.authService.getUser();
+    if (!user) return;
+
+    // Initialize fullName/email from JWT
+    this.fullName.set(user.fullName);
+    this.email.set(user.email);
+
+    // Fetch avatar from backend
+    this.authService.getAvatar(user.sub).subscribe({
+      next: (base64) => this.avatarUrl.set(base64),
+      error: () => console.log('No avatar found or error fetching avatar')
+    });
+
+    // Optional: fetch fullName/email from backend to make sure it's up-to-date
+    this.authService.fetchUser().subscribe(res => {
+      if (res.fullName) this.fullName.set(res.fullName);
+      if (res.email) this.email.set(res.email);
+    });
+  }
+
+  openModal() {
+    this.isModalOpen.set(true);
+  }
+
+  closeModal() {
+    this.isModalOpen.set(false);
+  }
+
+  onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
 
     const file = input.files[0];
+    this.selectedFile = file;
+
     const reader = new FileReader();
     reader.onload = () => this.avatarUrl.set(reader.result);
     reader.readAsDataURL(file);
   }
 
-  // Open modal
-  openModal() {
-    this.isModalOpen.set(true);
-  }
+  updateProfile(fullNameInput: HTMLInputElement, emailInput: HTMLInputElement, passwordInput: HTMLInputElement) {
+    this.authService.updateUser({
+      fullName: fullNameInput.value,
+      email: emailInput.value,
+      password: passwordInput.value,
+      avatar: this.selectedFile || undefined
+    }).subscribe(res => {
+      // Update signals
+      this.fullName.set(fullNameInput.value);
+      this.email.set(emailInput.value);
 
-  // Close modal
-  closeModal() {
-    this.isModalOpen.set(false);
-  }
+      // Update JWT localStorage
+      const user = this.authService.getUser();
+      if (user) {
+        user.fullName = fullNameInput.value;
+        user.email = emailInput.value;
+        localStorage.setItem('current_user', JSON.stringify(user));
+      }
 
-  
+      this.closeModal();
+    });
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

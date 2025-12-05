@@ -2,23 +2,22 @@
 
 <!-- Avatar -->
 <div class="avatar-container">
-  <label for="avatarInput" class="avatar-circle">
-    <img [src]="avatarUrl() || ''">
+  <label class="avatar-circle">
+    <img [src]="avatarUrl() || ''" alt="Avatar">
   </label>
-  <input type="file" id="avatarInput" (change)="onFileSelected($event)" accept="image/*" hidden>
 </div>
 
-<h1 class="profile-name">John Doe</h1>
+<h1 class="profile-name">{{ fullName() }}</h1>
 
 <!-- Profile Info -->
 <div class="profile-content">
   <div class="profile-item">
     <span class="profile-label">Full Name:</span>
-    <span class="profile-value">John Doe</span>
+    <span class="profile-value">{{ fullName() }}</span>
   </div>
   <div class="profile-item">
     <span class="profile-label">Email:</span>
-    <span class="profile-value">johndoe@gmail.com</span>
+    <span class="profile-value">{{ email() }}</span>
   </div>
   <div class="profile-item">
     <span class="profile-label">Followers:</span>
@@ -38,30 +37,43 @@
 <!-- Modal -->
 <div class="modal-backdrop" [style.display]="isModalOpen() ? 'flex' : 'none'">
   <div class="modal">
-    <!-- Top-right X button -->
     <button class="modal-close" (click)="closeModal()">×</button>
-
     <h2>Change Credential</h2>
 
     <div class="field">
-      <label>FullName:</label>
-      <input type="text" placeholder="Enter full name" />
+      <label>Full Name:</label>
+      <input #fullNameInput type="text" [value]="fullName()" placeholder="Enter full name" />
     </div>
 
     <div class="field">
       <label>Email:</label>
-      <input type="email" placeholder="Enter email" />
+      <input #emailInput type="email" [value]="email()" placeholder="Enter email" />
     </div>
 
     <div class="field">
       <label>Password:</label>
-      <input type="password" placeholder="Enter password" />
+      <input #passwordInput type="password" placeholder="Enter password" />
     </div>
 
-    <!-- Confirm button now closes modal too -->
-    <button class="confirm-btn" (click)="closeModal()">Confirm</button>
+    <div class="field">
+      <label>Avatar:</label>
+      <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+    </div>
+
+    <button class="confirm-btn" (click)="updateProfile(fullNameInput, emailInput, passwordInput)">Confirm</button>
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
