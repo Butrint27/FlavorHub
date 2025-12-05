@@ -43,7 +43,7 @@ export class LoginPage {
   }
 
   email = new FormControl('', [Validators.required, Validators.email]);
-  password = new FormControl('', [Validators.required, Validators.minLength(6)]);
+  password = new FormControl('', [Validators.required]);
 
   emailError = signal('');
   passwordError = signal('');
@@ -75,8 +75,6 @@ export class LoginPage {
   updatePasswordError() {
     if (this.password.hasError('required')) {
       this.passwordError.set('Password is required');
-    } else if (this.password.hasError('minlength')) {
-      this.passwordError.set('Password must be at least 6 characters');
     } else {
       this.passwordError.set('');
     }

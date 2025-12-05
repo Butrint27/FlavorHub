@@ -25,11 +25,24 @@ import { AuthService } from '../../services/auth.service'; // 👈 adjust the pa
 export class ToolbarMenu {
   @Input() sidenav!: MatSidenav;
   @Input() showMenuButton: boolean = true;
+  currentUser: any;
 
   constructor(
     private authService: AuthService,
     private router: Router
   ) {}
+
+  ngOnInit() {
+    const storedUser = localStorage.getItem('current_user');
+
+    if (storedUser) {
+      try {
+        this.currentUser = JSON.parse(storedUser);
+      } catch (e) {
+        console.error('Invalid current_user JSON in localStorage');
+      }
+    }
+  }
 
   toggleSidenav() {
     this.sidenav.toggle();
