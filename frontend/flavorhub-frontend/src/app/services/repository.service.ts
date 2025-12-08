@@ -10,17 +10,23 @@ export class RepositoryService {
 
   constructor(private http: HttpClient) {}
 
-  createRepository(formData: FormData): Observable<any> {
-    return this.http.post<any>(this.apiUrl, formData);
+  // Fetch all repositories
+  getAllRepositories(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}`);
   }
 
+  // Fetch one repository by ID
   getRepository(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
-  // Fetch all repositories for a specific user
+  // Fetch repositories for a specific user
   getRepositoriesByUser(userId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/user/${userId}`);
+  }
+
+  createRepository(formData: FormData): Observable<any> {
+    return this.http.post<any>(this.apiUrl, formData);
   }
 
   updateRepository(id: number, formData: FormData): Observable<any> {
@@ -31,6 +37,8 @@ export class RepositoryService {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
 }
+
+
 
 
 

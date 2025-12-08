@@ -6,11 +6,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { RepositoryService } from '../../services/repository.service';
 
 interface Card {
   id: number;
   title: string;
-  image: string;
+  image?: string;
   ingredients: string;
   dishType: string;
   description: string;
@@ -18,6 +19,7 @@ interface Card {
   avatar?: string;
   followed?: boolean;
   comments?: string[];
+  userId?: number;
 }
 
 @Component({
@@ -36,26 +38,16 @@ interface Card {
   ],
 })
 export class CardsPlaginator implements OnInit {
-  cards: Card[] = Array.from({ length: 16 }, (_, i) => ({
-    id: i + 1,
-    title: `Delicious Dish ${i + 1}`,
-    image: 'https://material.angular.dev/assets/img/examples/shiba2.jpg',
-    ingredients: 'Tomatoes, Cheese, Basil, Olive Oil',
-    dishType: 'Italian',
-    description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit...`,
-    liked: false,
-    avatar: 'https://material.angular.dev/assets/img/examples/shiba2.jpg',
-    followed: false,
-    comments: []
-  }));
-
+  cards: Card[] = [];
   currentPage = 0;
   cardsPerPage = 5;
+  loading = false;
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, private repositoryService: RepositoryService) {}
 
   ngOnInit(): void {
     this.updateCardsPerPage();
+    this.loadCards();
   }
 
   @HostListener('window:resize')
@@ -111,7 +103,7 @@ export class CardsPlaginator implements OnInit {
     this.dialog.open(CardModal, {
       data: card,
       width: '95%',
-      maxWidth: '650px', /* bigger modal */
+      maxWidth: '650px',
     });
   }
 
@@ -122,12 +114,48 @@ export class CardsPlaginator implements OnInit {
       maxWidth: '650px',
     });
   }
+
+  loadCards() {
+  this.repositoryService.getAllRepositories().subscribe({
+    next: (res) => {
+      console.log('API response:', res);
+      if (res && res.success && Array.isArray(res.data)) {
+        this.cards = res.data.map((repo: any) => ({
+          id: repo.id,
+          title: repo.title,
+          ingredients: repo.ingredience,
+          dishType: repo.dishType,
+          description: repo.description,
+          liked: false,
+          followed: false,
+          comments: [],
+          avatar: 'https://material.angular.dev/assets/img/examples/shiba2.jpg',
+          image: repo.image
+            ? `data:image/png;base64,${this.arrayBufferToBase64(repo.image.data)}`
+            : 'https://material.angular.dev/assets/img/examples/shiba2.jpg'
+        }));
+        this.currentPage = 0;       // Reset pagination
+        this.updateCardsPerPage();  // Refresh visibleCards calculation
+      }
+    },
+    error: (err) => console.error(err),
+  });
 }
 
-/* ================================
-   COMMENTS MODAL
-================================= */
+// Helper function to convert Buffer/ArrayBuffer to Base64
+arrayBufferToBase64(buffer: any) {
+  let binary = '';
+  const bytes = new Uint8Array(buffer);
+  const len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return window.btoa(binary);
+}
 
+}
+
+/* ========================= COMMENTS MODAL ========================= */
 @Component({
   selector: 'comments-modal',
   standalone: true,
@@ -135,33 +163,23 @@ export class CardsPlaginator implements OnInit {
   template: `
     <div class="modal-container">
       <h2 class="title">Comments</h2>
-
       <div class="comments-box">
-        <div *ngFor="let c of data.comments" class="comment-item">
-          {{ c }}
-        </div>
+        <div *ngFor="let c of data.comments" class="comment-item">{{ c }}</div>
       </div>
-
       <div class="input-container">
         <input type="text" placeholder="Write a comment..." [(ngModel)]="newComment">
         <button mat-icon-button (click)="addComment()">
           <mat-icon>send</mat-icon>
         </button>
       </div>
-
       <div class="actions">
         <button mat-button (click)="close()">Close</button>
       </div>
     </div>
   `,
   styles: [`
-    .modal-container {
-      padding: 20px;
-    }
-    .title {
-      margin-bottom: 15px;
-      text-align: center;
-    }
+    .modal-container { padding: 20px; }
+    .title { margin-bottom: 15px; text-align: center; }
     .comments-box {
       max-height: 250px;
       overflow-y: auto;
@@ -171,115 +189,61 @@ export class CardsPlaginator implements OnInit {
       background: #fafafa;
       margin-bottom: 15px;
     }
-    .comment-item {
-      padding: 8px;
-      margin-bottom: 6px;
-      background: #fff;
-      border-radius: 6px;
-      border: 1px solid #eee;
-    }
-    .input-container {
-      display: flex;
-      gap: 8px;
-    }
-    input {
-      flex: 1;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-    .actions {
-      margin-top: 15px;
-      text-align: center;
-    }
+    .comment-item { padding: 8px; margin-bottom: 6px; background: #fff; border-radius: 6px; border: 1px solid #eee; }
+    .input-container { display: flex; gap: 8px; }
+    input { flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
+    .actions { margin-top: 15px; text-align: center; }
   `]
 })
 export class CommentsModal {
   newComment = '';
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<CommentsModal>
-  ) {}
-
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<CommentsModal>) {}
   addComment() {
     if (this.newComment.trim().length > 0) {
       this.data.comments.push(this.newComment.trim());
       this.newComment = '';
     }
   }
-
-  close() {
-    this.dialogRef.close();
-  }
+  close() { this.dialogRef.close(); }
 }
 
-/* ===================================
-   ORIGINAL CARD MODAL (unchanged)
-===================================== */
-
+/* ========================= CARD MODAL ========================= */
 @Component({
   selector: 'card-modal',
   standalone: true,
   imports: [CommonModule, MatButtonModule, MatDialogModule, MatIconModule],
   template: `
-    <div class="modal-header">
-      <h2>{{data.title}}</h2>
-    </div>
+    <div class="modal-header"><h2>{{data.title}}</h2></div>
     <img [src]="data.image" class="modal-image">
-
     <p><strong>Ingredients:</strong> {{data.ingredients}}</p>
     <p><strong>Dish Type:</strong> {{data.dishType}}</p>
-
-    <div class="modal-description">
-      {{data.description}}
-    </div>
-
+    <div class="modal-description">{{data.description}}</div>
     <div class="modal-actions">
       <button mat-icon-button (click)="toggleLike()">
         <mat-icon>{{ data.liked ? 'favorite' : 'favorite_border' }}</mat-icon>
       </button>
-
       <button mat-button color="primary" (click)="toggleFollow()">
         {{ data.followed ? 'Following' : 'Follow' }}
       </button>
-
       <button mat-button color="accent" (click)="close()">Close</button>
     </div>
   `,
   styles: [`
     .modal-header { margin-bottom: 10px; }
-    .modal-image {
-      width: 100%;
-      max-height: 300px;
-      object-fit: cover;
-      border-radius: 6px;
-      margin-bottom: 12px;
-    }
-    .modal-description {
-      max-height: 200px;
-      overflow-y: auto;
-      padding: 10px;
-      border-radius: 6px;
-      background: #f3f3f3;
-      margin-bottom: 15px;
-    }
-    .modal-actions {
-      display: flex;
-      justify-content: space-between;
-    }
+    .modal-image { width: 100%; max-height: 300px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; }
+    .modal-description { max-height: 200px; overflow-y: auto; padding: 10px; border-radius: 6px; background: #f3f3f3; margin-bottom: 15px; }
+    .modal-actions { display: flex; justify-content: space-between; }
   `]
 })
 export class CardModal {
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<CardModal>
-  ) {}
-
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<CardModal>) {}
   close() { this.dialogRef.close(); }
   toggleLike() { this.data.liked = !this.data.liked; }
   toggleFollow() { this.data.followed = !this.data.followed; }
 }
+
+
+
 
 
 
