@@ -1,93 +1,72 @@
 <mat-sidenav-container class="sidenav-container">
-
-  <!-- Sidenav -->
   <mat-sidenav #sidenav mode="over" class="custom-sidenav">
     <div class="sidenav-header">
       <span class="category-title">Category</span>
       <hr class="category-line"/>
     </div>
-
     <div class="category-checkboxes">
       <label class="custom-checkbox">All
-        <input type="checkbox" 
-               [checked]="isChecked('All')" 
-               (change)="toggleCategory('All')">
+        <input type="checkbox" [checked]="isChecked('All')" (change)="toggleCategory('All')">
         <span class="checkmark"></span>
       </label>
-
       <label class="custom-checkbox">Appetizers
-        <input type="checkbox" 
-               [checked]="isChecked('Appetizers')" 
-               (change)="toggleCategory('Appetizers')">
+        <input type="checkbox" [checked]="isChecked('Appetizers')" (change)="toggleCategory('Appetizers')">
         <span class="checkmark"></span>
       </label>
-
       <label class="custom-checkbox">Protein
-        <input type="checkbox" 
-               [checked]="isChecked('Protein')" 
-               (change)="toggleCategory('Protein')">
+        <input type="checkbox" [checked]="isChecked('Protein')" (change)="toggleCategory('Protein')">
         <span class="checkmark"></span>
       </label>
-
       <label class="custom-checkbox">Breakfast
-        <input type="checkbox" 
-               [checked]="isChecked('Breakfast')" 
-               (change)="toggleCategory('Breakfast')">
+        <input type="checkbox" [checked]="isChecked('Breakfast')" (change)="toggleCategory('Breakfast')">
         <span class="checkmark"></span>
       </label>
-
       <label class="custom-checkbox">Desserts
-        <input type="checkbox" 
-               [checked]="isChecked('Desserts')" 
-               (change)="toggleCategory('Desserts')">
+        <input type="checkbox" [checked]="isChecked('Desserts')" (change)="toggleCategory('Desserts')">
         <span class="checkmark"></span>
       </label>
-
       <label class="custom-checkbox">Snacks
-        <input type="checkbox" 
-               [checked]="isChecked('Snacks')" 
-               (change)="toggleCategory('Snacks')">
+        <input type="checkbox" [checked]="isChecked('Snacks')" (change)="toggleCategory('Snacks')">
         <span class="checkmark"></span>
       </label>
     </div>
   </mat-sidenav>
 
-  <!-- Main Content -->
   <mat-sidenav-content>
-
-    <!-- Toolbar remains full width -->
     <app-toolbar-menu [sidenav]="sidenav"></app-toolbar-menu>
 
-    <!-- Centered category divs -->
-    <div class="categories-wrapper">
-      <div class="appetizers-div" [style.display]="getDisplay('Appetizers')">
-         <h1>Appetizers</h1>
-         <app-cards-plaginator></app-cards-plaginator>
-      </div>
+   <div class="categories-wrapper">
 
-      <div class="protein-div" [style.display]="getDisplay('Protein')">
-        <h1>Protein</h1>
-        <app-cards-plaginator></app-cards-plaginator>   
-      </div>
+  <div *ngIf="selectedCategory === 'All' || selectedCategory === 'Appetizers'">
+    <h2>Appetizers</h2>
+    <app-cards-plaginator [allCards]="appetizers"></app-cards-plaginator>
+  </div>
 
-      <div class="breakfast-div" [style.display]="getDisplay('Breakfast')">
-        <h1>Breakfast</h1>
-        <app-cards-plaginator></app-cards-plaginator>    
-      </div>
+  <div *ngIf="selectedCategory === 'All' || selectedCategory === 'Protein'">
+    <h2>Protein</h2>
+    <app-cards-plaginator [allCards]="protein"></app-cards-plaginator>
+  </div>
 
-      <div class="desserts-div" [style.display]="getDisplay('Desserts')">
-        <h1>Desserts</h1>
-        <app-cards-plaginator></app-cards-plaginator>  
-      </div>
+  <div *ngIf="selectedCategory === 'All' || selectedCategory === 'Breakfast'">
+    <h2>Breakfast</h2>
+    <app-cards-plaginator [allCards]="breakfast"></app-cards-plaginator>
+  </div>
 
-      <div class="snacks-div" [style.display]="getDisplay('Snacks')">
-        <h1>Snacks</h1> 
-        <app-cards-plaginator></app-cards-plaginator> 
-      </div>
-    </div>
+  <div *ngIf="selectedCategory === 'All' || selectedCategory === 'Desserts'">
+    <h2>Desserts</h2>
+    <app-cards-plaginator [allCards]="desserts"></app-cards-plaginator>
+  </div>
+
+  <div *ngIf="selectedCategory === 'All' || selectedCategory === 'Snacks'">
+    <h2>Snacks</h2>
+    <app-cards-plaginator [allCards]="snacks"></app-cards-plaginator>
+  </div>
+
+</div>
 
   </mat-sidenav-content>
 </mat-sidenav-container>
+
 
 
 

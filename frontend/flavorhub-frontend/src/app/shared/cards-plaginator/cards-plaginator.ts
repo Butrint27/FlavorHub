@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, Inject } from '@angular/core';
+import { Component, HostListener, OnInit, Input, Inject, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { RepositoryService } from '../../services/repository.service';
 
-interface Card {
+export interface Card {
   id: number;
   title: string;
   image?: string;
@@ -37,17 +37,29 @@ interface Card {
     FormsModule
   ],
 })
-export class CardsPlaginator implements OnInit {
+export class CardsPlaginator implements OnInit, OnChanges {
+  @Input() allCards: Card[] | null = null;  // NEW Input to receive cards from MainPage
   cards: Card[] = [];
   currentPage = 0;
   cardsPerPage = 5;
-  loading = false;
 
   constructor(private dialog: MatDialog, private repositoryService: RepositoryService) {}
 
   ngOnInit(): void {
     this.updateCardsPerPage();
-    this.loadCards();
+    if (!this.allCards) {
+      this.loadCards();
+    } else {
+      this.cards = this.allCards;
+    }
+  }
+
+  ngOnChanges(): void {
+    if (this.allCards) {
+      this.cards = this.allCards;
+      this.currentPage = 0;
+      this.updateCardsPerPage();
+    }
   }
 
   @HostListener('window:resize')
@@ -116,46 +128,43 @@ export class CardsPlaginator implements OnInit {
   }
 
   loadCards() {
-  this.repositoryService.getAllRepositories().subscribe({
-    next: (res) => {
-      console.log('API response:', res);
-      if (res && res.success && Array.isArray(res.data)) {
-        this.cards = res.data.map((repo: any) => ({
-          id: repo.id,
-          title: repo.title,
-          ingredients: repo.ingredience,
-          dishType: repo.dishType,
-          description: repo.description,
-          liked: false,
-          followed: false,
-          comments: [],
-          avatar: 'https://material.angular.dev/assets/img/examples/shiba2.jpg',
-          image: repo.image
-            ? `data:image/png;base64,${this.arrayBufferToBase64(repo.image.data)}`
-            : 'https://material.angular.dev/assets/img/examples/shiba2.jpg'
-        }));
-        this.currentPage = 0;       // Reset pagination
-        this.updateCardsPerPage();  // Refresh visibleCards calculation
-      }
-    },
-    error: (err) => console.error(err),
-  });
-}
-
-// Helper function to convert Buffer/ArrayBuffer to Base64
-arrayBufferToBase64(buffer: any) {
-  let binary = '';
-  const bytes = new Uint8Array(buffer);
-  const len = bytes.byteLength;
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
+    this.repositoryService.getAllRepositories().subscribe({
+      next: (res) => {
+        if (res && res.success && Array.isArray(res.data)) {
+          this.cards = res.data.map((repo: any) => ({
+            id: repo.id,
+            title: repo.title,
+            ingredients: repo.ingredience,
+            dishType: repo.dishType,
+            description: repo.description,
+            liked: false,
+            followed: false,
+            comments: [],
+            avatar: 'https://material.angular.dev/assets/img/examples/shiba2.jpg',
+            image: repo.image
+              ? `data:image/png;base64,${this.arrayBufferToBase64(repo.image.data)}`
+              : 'https://material.angular.dev/assets/img/examples/shiba2.jpg'
+          }));
+          this.currentPage = 0;
+          this.updateCardsPerPage();
+        }
+      },
+      error: (err) => console.error(err),
+    });
   }
-  return window.btoa(binary);
+
+  arrayBufferToBase64(buffer: any) {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+  }
 }
 
-}
-
-/* ========================= COMMENTS MODAL ========================= */
+/* ================= COMMENTS MODAL ================= */
 @Component({
   selector: 'comments-modal',
   standalone: true,
@@ -177,29 +186,13 @@ arrayBufferToBase64(buffer: any) {
       </div>
     </div>
   `,
-  styles: [`
-    .modal-container { padding: 20px; }
-    .title { margin-bottom: 15px; text-align: center; }
-    .comments-box {
-      max-height: 250px;
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      padding: 10px;
-      background: #fafafa;
-      margin-bottom: 15px;
-    }
-    .comment-item { padding: 8px; margin-bottom: 6px; background: #fff; border-radius: 6px; border: 1px solid #eee; }
-    .input-container { display: flex; gap: 8px; }
-    input { flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
-    .actions { margin-top: 15px; text-align: center; }
-  `]
+  styles: [/* keep your styles here */]
 })
 export class CommentsModal {
   newComment = '';
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<CommentsModal>) {}
   addComment() {
-    if (this.newComment.trim().length > 0) {
+    if (this.newComment.trim()) {
       this.data.comments.push(this.newComment.trim());
       this.newComment = '';
     }
@@ -207,7 +200,7 @@ export class CommentsModal {
   close() { this.dialogRef.close(); }
 }
 
-/* ========================= CARD MODAL ========================= */
+/* ================= CARD MODAL ================= */
 @Component({
   selector: 'card-modal',
   standalone: true,
@@ -228,12 +221,7 @@ export class CommentsModal {
       <button mat-button color="accent" (click)="close()">Close</button>
     </div>
   `,
-  styles: [`
-    .modal-header { margin-bottom: 10px; }
-    .modal-image { width: 100%; max-height: 300px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; }
-    .modal-description { max-height: 200px; overflow-y: auto; padding: 10px; border-radius: 6px; background: #f3f3f3; margin-bottom: 15px; }
-    .modal-actions { display: flex; justify-content: space-between; }
-  `]
+  styles: [/* keep your styles here */]
 })
 export class CardModal {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<CardModal>) {}
@@ -241,6 +229,7 @@ export class CardModal {
   toggleLike() { this.data.liked = !this.data.liked; }
   toggleFollow() { this.data.followed = !this.data.followed; }
 }
+
 
 
 
