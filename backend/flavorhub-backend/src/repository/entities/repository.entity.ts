@@ -24,7 +24,7 @@ export class Repository {
    description: string;
 
    @ManyToOne(() => User, (user) => user.repository)
-   user: User
+   user: User;
 
    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
    createdAt: Date;

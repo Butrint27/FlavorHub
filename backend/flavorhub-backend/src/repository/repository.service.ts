@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, HttpException, HttpStatus, Patch, Param, Body } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository as TypeOrmRepository } from 'typeorm';
 import { Repository } from './entities/repository.entity';
@@ -55,6 +55,48 @@ export class RepositoryService {
     const repo = await this.findOne(id);
     await this.repoRepo.remove(repo);
   }
+
+  async findByUserId(userId: number): Promise<any[]> {
+  // Check if the user exists
+  const user = await this.userRepo.findOne({ where: { id: userId } });
+  if (!user) throw new NotFoundException('User not found');
+
+  // Use QueryBuilder, exclude image column
+  const repositories = await this.repoRepo
+    .createQueryBuilder('repository')
+    .select([
+      'repository.id',
+      'repository.title',
+      'repository.image',
+      'repository.dishType',
+      'repository.ingredience',
+      'repository.description',
+      'repository.createdAt',
+      'repository.updatedAt',
+      'repository.userId',
+    ])
+    .where('repository.userId = :userId', { userId })
+    .getMany();
+
+    return repositories; // array of all repositories for this user, image excluded
+  }
+
+  async updateRepoByUserId(userId: number, repositoryId: number ,updateDto: UpdateRepositoryDto): Promise<Repository> {
+    const repo = await this.repoRepo.findOne({ where: { id: repositoryId, user: { id: userId } } });
+    if (!repo) throw new NotFoundException('Repository not found for this user');
+
+    Object.assign(repo, updateDto);
+    return this.repoRepo.save(repo);
+  }
+
+  async deleteRepoByUserId(userId: number, repositoryId: number): Promise<void> {
+    const repo = await this.repoRepo.findOne({ where: { id: repositoryId, user: { id: userId } } });
+    if (!repo) throw new NotFoundException('Repository not found for this user');
+
+    await this.repoRepo.remove(repo);
+  }
+
+
 }
 
 

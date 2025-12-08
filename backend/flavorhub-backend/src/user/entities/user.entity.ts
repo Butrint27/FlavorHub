@@ -35,13 +35,13 @@ export class User {
   refreshToken?: string;
 
   @OneToMany(() => Repository, (repository) => repository.user)
-  repository: Repository[]
+  repository: Repository[];
 
   @OneToMany(() => Like, (like) => like.user)
-  like: Like[]
+  like: Like[];
 
   @OneToMany(() => Comment, (comment) => comment.user)
-  comment: Comment[]
+  comment: Comment[];
 
   @OneToMany(() => Follower, (follower) => follower.followsUser)
   followers: Follower[];
