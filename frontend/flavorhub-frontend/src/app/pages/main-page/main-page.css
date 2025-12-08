@@ -105,7 +105,7 @@
   box-sizing: border-box;
 }
 
-/* --- Category divs styling --- */
+/* --- Category sections --- */
 .appetizers-div,
 .protein-div,
 .breakfast-div,
@@ -117,12 +117,12 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* centers content horizontally */
   gap: 24px;
   box-sizing: border-box;
 }
 
-/* --- Headings styling --- */
+/* Headings styling */
 .appetizers-div h1,
 .protein-div h1,
 .breakfast-div h1,
@@ -132,13 +132,12 @@
   font-weight: 400;
   color: black;
   font-size: 128px;
-  text-align: center;
-  margin: 0 auto;
+  text-align: center;   /* center the text */
+  margin: 0 auto 24px;  /* spacing below text */
   position: relative;
 }
 
-/* Full-width black line below heading */
-/* Full-width black line below heading */
+/* Full-width black line below heading (95% width of viewport) */
 .appetizers-div h1::after,
 .protein-div h1::after,
 .breakfast-div h1::after,
@@ -146,21 +145,11 @@
 .snacks-div h1::after {
   content: '';
   display: block;
-  width: 90vw;       /* full viewport width */
-  height: 5px;        /* thickness */
+  width: 90vw;              /* 95% of viewport width */
+  max-width: 1200px;        /* optional, matches container max width */
+  height: 5px;
   background-color: black;
-  margin: 24px auto 0 auto;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-
-/* --- Center paginator --- */
-mat-paginator {
-  display: flex;
-  justify-content: center;
-  width: 100%;
+  margin: 20px auto 0 auto;  /* center the line under heading */
 }
 
 /* --- Responsive adjustments --- */
@@ -211,6 +200,7 @@ mat-paginator {
     font-size: 48px;
   }
 }
+
 
 
 

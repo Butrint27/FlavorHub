@@ -35,37 +35,38 @@
   <mat-sidenav-content>
     <app-toolbar-menu [sidenav]="sidenav"></app-toolbar-menu>
 
-   <div class="categories-wrapper">
+    <div class="categories-wrapper">
 
-  <div *ngIf="selectedCategory === 'All' || selectedCategory === 'Appetizers'">
-    <h2>Appetizers</h2>
-    <app-cards-plaginator [allCards]="appetizers"></app-cards-plaginator>
-  </div>
+      <div class="appetizers-div" *ngIf="selectedCategory === 'All' || selectedCategory === 'Appetizers'">
+        <h1>Appetizers</h1>
+        <app-cards-plaginator [allCards]="appetizers"></app-cards-plaginator>
+      </div>
 
-  <div *ngIf="selectedCategory === 'All' || selectedCategory === 'Protein'">
-    <h2>Protein</h2>
-    <app-cards-plaginator [allCards]="protein"></app-cards-plaginator>
-  </div>
+      <div class="protein-div" *ngIf="selectedCategory === 'All' || selectedCategory === 'Protein'">
+        <h1>Protein</h1>
+        <app-cards-plaginator [allCards]="protein"></app-cards-plaginator>
+      </div>
 
-  <div *ngIf="selectedCategory === 'All' || selectedCategory === 'Breakfast'">
-    <h2>Breakfast</h2>
-    <app-cards-plaginator [allCards]="breakfast"></app-cards-plaginator>
-  </div>
+      <div class="breakfast-div" *ngIf="selectedCategory === 'All' || selectedCategory === 'Breakfast'">
+        <h1>Breakfast</h1>
+        <app-cards-plaginator [allCards]="breakfast"></app-cards-plaginator>
+      </div>
 
-  <div *ngIf="selectedCategory === 'All' || selectedCategory === 'Desserts'">
-    <h2>Desserts</h2>
-    <app-cards-plaginator [allCards]="desserts"></app-cards-plaginator>
-  </div>
+      <div class="desserts-div" *ngIf="selectedCategory === 'All' || selectedCategory === 'Desserts'">
+        <h1>Desserts</h1>
+        <app-cards-plaginator [allCards]="desserts"></app-cards-plaginator>
+      </div>
 
-  <div *ngIf="selectedCategory === 'All' || selectedCategory === 'Snacks'">
-    <h2>Snacks</h2>
-    <app-cards-plaginator [allCards]="snacks"></app-cards-plaginator>
-  </div>
+      <div class="snacks-div" *ngIf="selectedCategory === 'All' || selectedCategory === 'Snacks'">
+        <h1>Snacks</h1>
+        <app-cards-plaginator [allCards]="snacks"></app-cards-plaginator>
+      </div>
 
-</div>
+    </div>
 
   </mat-sidenav-content>
 </mat-sidenav-container>
+
 
 
 
