@@ -23,7 +23,6 @@
     <!-- Avatar Circle -->
     <div class="avatar-circle" [matMenuTriggerFor]="menu">
       <img *ngIf="avatarUrl" [src]="avatarUrl" alt="Avatar">
-      <mat-icon *ngIf="!avatarUrl">person</mat-icon>
     </div>
 
     <mat-menu #menu="matMenu" xPosition="before" yPosition="below">
