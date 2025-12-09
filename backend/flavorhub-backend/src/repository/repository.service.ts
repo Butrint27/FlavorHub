@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException, HttpException, HttpStatus, Patch, Param, Body } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository as TypeOrmRepository } from 'typeorm';
 import { Repository } from './entities/repository.entity';
@@ -16,30 +16,44 @@ export class RepositoryService {
     private readonly userRepo: TypeOrmRepository<User>,
   ) {}
 
-  async create(createDto: CreateRepositoryDto): Promise<Repository> {
+  // Create new repository
+  async create(createDto: CreateRepositoryDto): Promise<any> {
     const user = await this.userRepo.findOne({ where: { id: createDto.userId } });
     if (!user) throw new NotFoundException('User not found');
 
-    const repo = this.repoRepo.create({
-      ...createDto,
-      user,
-    });
+    const repo = this.repoRepo.create({ ...createDto, user });
+    const savedRepo = await this.repoRepo.save(repo);
 
-    return this.repoRepo.save(repo);
+    return { ...savedRepo, userId: user.id };
   }
 
-  async findAll(): Promise<Repository[]> {
-    return this.repoRepo.find({ relations: ['user'] });
+  // Get all repositories
+  async findAll(): Promise<any[]> {
+  const repos = await this.repoRepo.find({ relations: ['user'] });
+  return repos.map(r => ({
+    id: r.id,
+    title: r.title,
+    dishType: r.dishType,
+    ingredience: r.ingredience,
+    description: r.description,
+    userId: r.user?.id,   // ✅ ensure userId is sent
+    image: r.image,
+    createdAt: r.createdAt,
+    updatedAt: r.updatedAt
+  }));
   }
 
-  async findOne(id: number): Promise<Repository> {
+  // Get repository by ID
+  async findOne(id: number): Promise<any> {
     const repo = await this.repoRepo.findOne({ where: { id }, relations: ['user'] });
     if (!repo) throw new NotFoundException('Repository not found');
-    return repo;
+    return { ...repo, userId: repo.user?.id };
   }
 
-  async update(id: number, updateDto: UpdateRepositoryDto): Promise<Repository> {
-    const repo = await this.findOne(id);
+  // Update repository by ID
+  async update(id: number, updateDto: UpdateRepositoryDto): Promise<any> {
+    const repo = await this.repoRepo.findOne({ where: { id }, relations: ['user'] });
+    if (!repo) throw new NotFoundException('Repository not found');
 
     if (updateDto.userId) {
       const user = await this.userRepo.findOne({ where: { id: updateDto.userId } });
@@ -48,56 +62,44 @@ export class RepositoryService {
     }
 
     Object.assign(repo, updateDto);
-    return this.repoRepo.save(repo);
+    const updatedRepo = await this.repoRepo.save(repo);
+    return { ...updatedRepo, userId: updatedRepo.user?.id };
   }
 
+  // Delete repository by ID
   async remove(id: number): Promise<void> {
-    const repo = await this.findOne(id);
+    const repo = await this.repoRepo.findOne({ where: { id }, relations: ['user'] });
+    if (!repo) throw new NotFoundException('Repository not found');
     await this.repoRepo.remove(repo);
   }
 
+  // Get all repositories for a specific user
   async findByUserId(userId: number): Promise<any[]> {
-  // Check if the user exists
-  const user = await this.userRepo.findOne({ where: { id: userId } });
-  if (!user) throw new NotFoundException('User not found');
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) throw new NotFoundException('User not found');
 
-  // Use QueryBuilder, exclude image column
-  const repositories = await this.repoRepo
-    .createQueryBuilder('repository')
-    .select([
-      'repository.id',
-      'repository.title',
-      'repository.image',
-      'repository.dishType',
-      'repository.ingredience',
-      'repository.description',
-      'repository.createdAt',
-      'repository.updatedAt',
-      'repository.userId',
-    ])
-    .where('repository.userId = :userId', { userId })
-    .getMany();
-
-    return repositories; // array of all repositories for this user, image excluded
+    const repos = await this.repoRepo.find({ where: { user: { id: userId } }, relations: ['user'] });
+    return repos.map(r => ({ ...r, userId: r.user?.id }));
   }
 
-  async updateRepoByUserId(userId: number, repositoryId: number ,updateDto: UpdateRepositoryDto): Promise<Repository> {
-    const repo = await this.repoRepo.findOne({ where: { id: repositoryId, user: { id: userId } } });
+  // Update repository for a specific user
+  async updateRepoByUserId(userId: number, repositoryId: number, updateDto: UpdateRepositoryDto): Promise<any> {
+    const repo = await this.repoRepo.findOne({ where: { id: repositoryId, user: { id: userId } }, relations: ['user'] });
     if (!repo) throw new NotFoundException('Repository not found for this user');
 
     Object.assign(repo, updateDto);
-    return this.repoRepo.save(repo);
+    const updatedRepo = await this.repoRepo.save(repo);
+    return { ...updatedRepo, userId: updatedRepo.user?.id };
   }
 
+  // Delete repository for a specific user
   async deleteRepoByUserId(userId: number, repositoryId: number): Promise<void> {
-    const repo = await this.repoRepo.findOne({ where: { id: repositoryId, user: { id: userId } } });
+    const repo = await this.repoRepo.findOne({ where: { id: repositoryId, user: { id: userId } }, relations: ['user'] });
     if (!repo) throw new NotFoundException('Repository not found for this user');
-
     await this.repoRepo.remove(repo);
   }
-
-
-
 }
+
+
 
 

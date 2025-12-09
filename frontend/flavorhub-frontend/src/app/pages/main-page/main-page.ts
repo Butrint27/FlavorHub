@@ -38,6 +38,7 @@ export class MainPage implements OnInit {
           ingredients: repo.ingredience,
           dishType: repo.dishType,
           description: repo.description,
+          userId: repo.userId,
           liked: false,
           followed: false,
           comments: [],

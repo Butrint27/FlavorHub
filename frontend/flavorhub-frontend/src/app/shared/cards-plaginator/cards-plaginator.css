@@ -1,3 +1,10 @@
+.card-user {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 4px;
+  display: block;
+}
+
 .carousel {
   display: flex;
   align-items: center;

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, Input, Inject, OnChanges } from '@angular/core';
+import { Component, HostListener, OnInit, Input, OnChanges, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,11 +15,10 @@ export interface Card {
   ingredients: string;
   dishType: string;
   description: string;
+  userId: number;           
   liked?: boolean;
-  avatar?: string;
   followed?: boolean;
   comments?: string[];
-  userId?: number;
 }
 
 @Component({
@@ -38,7 +37,7 @@ export interface Card {
   ],
 })
 export class CardsPlaginator implements OnInit, OnChanges {
-  @Input() allCards: Card[] | null = null;  // NEW Input to receive cards from MainPage
+  @Input() allCards: Card[] | null = null;
   cards: Card[] = [];
   currentPage = 0;
   cardsPerPage = 5;
@@ -47,11 +46,8 @@ export class CardsPlaginator implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.updateCardsPerPage();
-    if (!this.allCards) {
-      this.loadCards();
-    } else {
-      this.cards = this.allCards;
-    }
+    if (!this.allCards) this.loadCards();
+    else this.cards = this.allCards;
   }
 
   ngOnChanges(): void {
@@ -70,7 +66,6 @@ export class CardsPlaginator implements OnInit, OnChanges {
   updateCardsPerPage(keepVisibleCard = false): void {
     const width = window.innerWidth;
     let newCardsPerPage = 4;
-
     if (width < 600) newCardsPerPage = 1;
     else if (width < 1024) newCardsPerPage = 2;
 
@@ -80,10 +75,7 @@ export class CardsPlaginator implements OnInit, OnChanges {
     }
 
     this.cardsPerPage = newCardsPerPage;
-
-    if (this.currentPage >= this.totalPages) {
-      this.currentPage = this.totalPages - 1;
-    }
+    if (this.currentPage >= this.totalPages) this.currentPage = this.totalPages - 1;
   }
 
   get totalPages() {
@@ -95,71 +87,51 @@ export class CardsPlaginator implements OnInit, OnChanges {
     return this.cards.slice(start, start + this.cardsPerPage);
   }
 
-  prevPage() {
-    if (this.currentPage > 0) this.currentPage--;
-  }
+  prevPage() { if (this.currentPage > 0) this.currentPage--; }
+  nextPage() { if (this.currentPage < this.totalPages - 1) this.currentPage++; }
 
-  nextPage() {
-    if (this.currentPage < this.totalPages - 1) this.currentPage++;
-  }
-
-  toggleLike(card: Card) {
-    card.liked = !card.liked;
-  }
-
-  toggleFollow(card: Card) {
-    card.followed = !card.followed;
-  }
+  toggleLike(card: Card) { card.liked = !card.liked; }
+  toggleFollow(card: Card) { card.followed = !card.followed; }
 
   openModal(card: Card) {
-    this.dialog.open(CardModal, {
-      data: card,
-      width: '95%',
-      maxWidth: '650px',
-    });
+    this.dialog.open(CardModal, { data: card, width: '95%', maxWidth: '650px' });
   }
 
   openComments(card: Card) {
-    this.dialog.open(CommentsModal, {
-      data: card,
-      width: '95%',
-      maxWidth: '650px',
-    });
+    this.dialog.open(CommentsModal, { data: card, width: '95%', maxWidth: '650px' });
   }
 
-  loadCards() {
+  loadCards(): void {
     this.repositoryService.getAllRepositories().subscribe({
       next: (res) => {
-        if (res && res.success && Array.isArray(res.data)) {
+        if (res?.success && Array.isArray(res.data)) {
           this.cards = res.data.map((repo: any) => ({
-            id: repo.id,
+            id: Number(repo.id),
             title: repo.title,
             ingredients: repo.ingredience,
             dishType: repo.dishType,
             description: repo.description,
+            userId: Number(repo.userId),  // <-- THIS FIXES IT
             liked: false,
             followed: false,
             comments: [],
-            avatar: 'https://material.angular.dev/assets/img/examples/shiba2.jpg',
-            image: repo.image
+            image: repo.image?.data
               ? `data:image/png;base64,${this.arrayBufferToBase64(repo.image.data)}`
-              : 'https://material.angular.dev/assets/img/examples/shiba2.jpg'
+              : ''
           }));
-          this.currentPage = 0;
-          this.updateCardsPerPage();
+          console.log('Cards loaded:', this.cards); // Confirm userId here
         }
       },
-      error: (err) => console.error(err),
+      error: (err) => console.error('Error loading repositories', err),
     });
   }
 
-  arrayBufferToBase64(buffer: any) {
+  private arrayBufferToBase64(buffer: any): string {
+    if (!buffer) return '';
     let binary = '';
     const bytes = new Uint8Array(buffer);
     const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
+    for (let i = 0; i < len; i++) binary += String.fromCharCode(bytes[i]);
     return window.btoa(binary);
   }
 }
@@ -185,15 +157,14 @@ export class CardsPlaginator implements OnInit, OnChanges {
         <button mat-button (click)="close()">Close</button>
       </div>
     </div>
-  `,
-  styles: [/* keep your styles here */]
+  `
 })
 export class CommentsModal {
   newComment = '';
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<CommentsModal>) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: Card, private dialogRef: MatDialogRef<CommentsModal>) {}
   addComment() {
     if (this.newComment.trim()) {
-      this.data.comments.push(this.newComment.trim());
+      this.data.comments?.push(this.newComment.trim());
       this.newComment = '';
     }
   }
@@ -211,6 +182,7 @@ export class CommentsModal {
     <p><strong>Ingredients:</strong> {{data.ingredients}}</p>
     <p><strong>Dish Type:</strong> {{data.dishType}}</p>
     <div class="modal-description">{{data.description}}</div>
+    <div class="modal-user"><strong>User ID:</strong> {{data.userId}}</div>
     <div class="modal-actions">
       <button mat-icon-button (click)="toggleLike()">
         <mat-icon>{{ data.liked ? 'favorite' : 'favorite_border' }}</mat-icon>
@@ -220,15 +192,23 @@ export class CommentsModal {
       </button>
       <button mat-button color="accent" (click)="close()">Close</button>
     </div>
-  `,
-  styles: [/* keep your styles here */]
+  `
 })
 export class CardModal {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<CardModal>) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: Card, private dialogRef: MatDialogRef<CardModal>) {}
   close() { this.dialogRef.close(); }
   toggleLike() { this.data.liked = !this.data.liked; }
   toggleFollow() { this.data.followed = !this.data.followed; }
 }
+
+
+
+
+
+
+
+
+
 
 
 

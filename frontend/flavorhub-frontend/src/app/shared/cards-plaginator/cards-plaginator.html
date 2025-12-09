@@ -7,21 +7,27 @@
     <mat-card class="card" *ngFor="let card of visibleCards" (click)="openModal(card)">
       <div class="card-header">
         <div class="avatar" routerLink="/profile"></div>
-        <div class="card-title">{{ card.title }}</div>
+        <div class="card-title">{{ card.title }}</div>        
       </div>
+
       <img mat-card-image [src]="card.image" alt="{{card.title}}">
+
       <mat-card-content>
-        <p><strong>Ingredients:</strong> {{card.ingredients}}</p>
-        <p><strong>Dish Type:</strong> {{card.dishType}}</p>
-        <p><strong>Description:</strong> {{card.description | slice:0:60}}...</p>
+        <p><strong>Ingredients:</strong> {{ card.ingredients }}</p>
+        <p><strong>Dish Type:</strong> {{ card.dishType }}</p>
+        <p><strong>Description:</strong> {{ card.description | slice:0:60 }}...</p>
+        <div class="card-user"><strong>User ID:</strong> {{ card.userId }}</div>
       </mat-card-content>
+
       <mat-card-actions class="actions">
         <button mat-icon-button (click)="toggleLike(card); $event.stopPropagation()">
           <mat-icon [color]="card.liked ? 'warn' : ''">{{ card.liked ? 'favorite' : 'favorite_border' }}</mat-icon>
         </button>
+
         <button mat-icon-button (click)="openComments(card); $event.stopPropagation()">
           <mat-icon>comment</mat-icon>
         </button>
+
         <button mat-button color="primary" (click)="toggleFollow(card); $event.stopPropagation()">
           {{ card.followed ? 'Following' : 'Follow' }}
         </button>
@@ -29,10 +35,15 @@
     </mat-card>
   </div>
 
-  <button class="arrow" (click)="nextPage()" [disabled]="currentPage === totalPages - 1">
+  <button class="arrow" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">
     <mat-icon>chevron_right</mat-icon>
   </button>
 </div>
+
+
+
+
+
 
 
 

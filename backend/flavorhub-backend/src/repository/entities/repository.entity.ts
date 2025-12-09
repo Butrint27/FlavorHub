@@ -1,45 +1,50 @@
 import { User } from "src/user/entities/user.entity";
 import { Like } from "src/likes/entities/like.entity";
 import { Comment } from "src/comments/entities/comment.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Repository {
-   @PrimaryGeneratedColumn()
-   id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-   @Column()
-   title: string;
+  @Column()
+  title: string;
 
-   @Column()
-   dishType: string;
+  @Column()
+  dishType: string;
 
-   @Column()
-   ingredience: string;
+  @Column()
+  ingredience: string;
 
-   @Column({ type: 'longblob', nullable: true })
-   image?: Buffer;
+  @Column({ type: 'longblob', nullable: true })
+  image?: Buffer;
 
-   @Column()
-   description: string;
+  @Column()
+  description: string;
 
-   @ManyToOne(() => User, (user) => user.repository)
-   user: User;
+  @ManyToOne(() => User, (user) => user.repository)
+  user: User;
 
-   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-   createdAt: Date;
+  // Virtual field to expose userId easily
+  get userId(): number {
+    return this.user?.id;
+  }
 
-   @Column({
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
-   })
-   updatedAt: Date;
+  })
+  updatedAt: Date;
 
-   @OneToMany(() => Like, (like) => like.repository)
-   like: Like[]
+  @OneToMany(() => Like, (like) => like.repository)
+  like: Like[];
 
-   @OneToMany(() => Comment, (comment) => comment.repository)
-   comment: Comment[]
-
+  @OneToMany(() => Comment, (comment) => comment.repository)
+  comment: Comment[];
 }
+
