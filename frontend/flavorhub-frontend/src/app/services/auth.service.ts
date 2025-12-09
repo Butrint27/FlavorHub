@@ -61,6 +61,13 @@ export class AuthService {
     );
   }
 
+  getUserById(userId: number): Observable<{ fullName: string; email: string; avatar?: string }> {
+  return this.http.get<{ fullName: string; email: string; avatar?: string }>(
+    `${this.apiUrl}/${userId}`,
+    { headers: { Authorization: `Bearer ${this.getToken()}` } }
+  );
+  }
+
   // Update user info
   updateUser(data: {
     fullName?: string;

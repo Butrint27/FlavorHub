@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { RepositoryService } from '../../services/repository.service';
 import { AuthService } from '../../services/auth.service';
-import { map, switchMap } from 'rxjs';
+import { switchMap } from 'rxjs';
 
 export interface Card {
   id: number;
@@ -109,6 +109,10 @@ export class CardsPlaginator implements OnInit, OnChanges {
     this.dialog.open(CommentsModal, { data: card, width: '95%', maxWidth: '650px' });
   }
 
+  openUserModal(userId: number) {
+    this.dialog.open(UserPreviewModal, { data: { userId }, width: '95%', maxWidth: '380px' });
+  }
+
   loadCards(): void {
     this.repositoryService.getAllRepositories().subscribe({
       next: (res) => {
@@ -127,7 +131,7 @@ export class CardsPlaginator implements OnInit, OnChanges {
               ? `data:image/png;base64,${this.arrayBufferToBase64(repo.image.data)}`
               : ''
           }));
-          this.loadAvatars(); // load avatars after cards are loaded
+          this.loadAvatars();
         }
       },
       error: (err) => console.error('Error loading repositories', err),
@@ -138,7 +142,7 @@ export class CardsPlaginator implements OnInit, OnChanges {
     this.cards.forEach(card => {
       this.authService.getAvatar(card.userId).subscribe({
         next: (avatarBase64) => card.avatar = avatarBase64,
-        error: () => card.avatar = 'https://material.angular.dev/assets/img/examples/shiba2.jpg' // fallback
+        error: () => card.avatar = '' // leave empty if fails
       });
     });
   }
@@ -198,7 +202,7 @@ export class CommentsModal {
     <img [src]="data.image" class="modal-image">
     <p><strong>Ingredients:</strong> {{data.ingredients}}</p>
     <p><strong>Dish Type:</strong> {{data.dishType}}</p>
-    <div class="modal-description">{{data.description}}</div>
+    <p><strong>Description:</strong> {{data.description}}</p>
     <div class="modal-user"><strong>User ID:</strong> {{data.userId}}</div>
     <div class="modal-actions">
       <button mat-icon-button (click)="toggleLike()">
@@ -217,6 +221,62 @@ export class CardModal {
   toggleLike() { this.data.liked = !this.data.liked; }
   toggleFollow() { this.data.followed = !this.data.followed; }
 }
+
+/* ================= USER PREVIEW MODAL ================= */
+@Component({
+  selector: 'user-preview-modal',
+  standalone: true,
+  imports: [CommonModule, MatDialogModule, MatButtonModule],
+  template: `
+    <div class="user-preview-container" *ngIf="!loading && user">
+      <div class="up-avatar-box">
+        <img [src]="user.avatar || ''" class="up-avatar">
+      </div>
+      <h2 class="up-name">{{ user.fullName }}</h2>
+      <p class="up-email">{{ user.email }}</p>
+      <button mat-button color="primary" (click)="close()">Close</button>
+    </div>
+    <div class="up-spinner" *ngIf="loading"></div>
+  `,
+  styles: [`
+    .user-preview-container { text-align:center; padding:20px; }
+    .up-avatar-box { width:130px; height:130px; margin:auto; border-radius:50%; overflow:hidden; border:3px solid #C9B59C; }
+    .up-avatar { width:100%; height:100%; object-fit:cover; }
+    .up-name { margin-top:12px; font-size:22px; font-weight:600; }
+    .up-email { font-size:15px; color:#555; margin-bottom:20px; }
+    .up-spinner { margin:auto; width:40px; height:40px; border-radius:50%; border:4px solid #ddd; border-top-color:#3f51b5; animation: spin 0.8s linear infinite; }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+  `]
+})
+export class UserPreviewModal implements OnInit {
+  user: { fullName: string; email: string; avatar?: string } | null = null;
+  loading = true;
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { userId: number },
+    private authService: AuthService,
+    private dialogRef: MatDialogRef<UserPreviewModal>
+  ) {}
+
+  ngOnInit() {
+    // First fetch the user info
+    this.authService.getUserById(this.data.userId).subscribe({
+      next: user => {
+        this.user = user; // assign fullName and email
+        // Now fetch avatar
+        this.authService.getAvatar(this.data.userId).subscribe({
+          next: avatarBase64 => { if(this.user) this.user.avatar = avatarBase64; this.loading = false; },
+          error: () => { this.loading = false; }
+        });
+      },
+      error: () => { this.loading = false; this.user = { fullName: 'Unknown', email: 'Unknown' }; }
+    });
+  }
+
+  close() { this.dialogRef.close(); }
+}
+
+
 
 
 

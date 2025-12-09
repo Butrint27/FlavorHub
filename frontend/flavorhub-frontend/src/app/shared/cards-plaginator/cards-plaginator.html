@@ -6,7 +6,7 @@
   <div class="cards-wrapper">
     <mat-card class="card" *ngFor="let card of visibleCards" (click)="openModal(card)">
       <div class="card-header">
-        <div class="avatar" routerLink="/profile">
+        <div class="avatar" (click)="openUserModal(card.userId); $event.stopPropagation()">
           <img *ngIf="card.avatar" [src]="card.avatar" alt="User Avatar">
         </div>
         <div class="card-title">{{ card.title }}</div>
@@ -25,11 +25,9 @@
         <button mat-icon-button (click)="toggleLike(card); $event.stopPropagation()">
           <mat-icon [color]="card.liked ? 'warn' : ''">{{ card.liked ? 'favorite' : 'favorite_border' }}</mat-icon>
         </button>
-
         <button mat-icon-button (click)="openComments(card); $event.stopPropagation()">
           <mat-icon>comment</mat-icon>
         </button>
-
         <button mat-button color="primary" (click)="toggleFollow(card); $event.stopPropagation()">
           {{ card.followed ? 'Following' : 'Follow' }}
         </button>
@@ -41,6 +39,7 @@
     <mat-icon>chevron_right</mat-icon>
   </button>
 </div>
+
 
 
 
