@@ -6,8 +6,10 @@
   <div class="cards-wrapper">
     <mat-card class="card" *ngFor="let card of visibleCards" (click)="openModal(card)">
       <div class="card-header">
-        <div class="avatar" routerLink="/profile"></div>
-        <div class="card-title">{{ card.title }}</div>        
+        <div class="avatar" routerLink="/profile">
+          <img *ngIf="card.avatar" [src]="card.avatar" alt="User Avatar">
+        </div>
+        <div class="card-title">{{ card.title }}</div>
       </div>
 
       <img mat-card-image [src]="card.image" alt="{{card.title}}">
@@ -39,6 +41,7 @@
     <mat-icon>chevron_right</mat-icon>
   </button>
 </div>
+
 
 
 

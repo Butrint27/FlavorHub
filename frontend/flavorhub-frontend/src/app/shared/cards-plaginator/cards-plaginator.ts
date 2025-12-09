@@ -7,6 +7,8 @@ import { MatDialog, MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angu
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { RepositoryService } from '../../services/repository.service';
+import { AuthService } from '../../services/auth.service';
+import { map, switchMap } from 'rxjs';
 
 export interface Card {
   id: number;
@@ -15,7 +17,8 @@ export interface Card {
   ingredients: string;
   dishType: string;
   description: string;
-  userId: number;           
+  userId: number;
+  avatar?: string;
   liked?: boolean;
   followed?: boolean;
   comments?: string[];
@@ -42,7 +45,11 @@ export class CardsPlaginator implements OnInit, OnChanges {
   currentPage = 0;
   cardsPerPage = 5;
 
-  constructor(private dialog: MatDialog, private repositoryService: RepositoryService) {}
+  constructor(
+    private dialog: MatDialog,
+    private repositoryService: RepositoryService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.updateCardsPerPage();
@@ -55,6 +62,7 @@ export class CardsPlaginator implements OnInit, OnChanges {
       this.cards = this.allCards;
       this.currentPage = 0;
       this.updateCardsPerPage();
+      this.loadAvatars();
     }
   }
 
@@ -111,7 +119,7 @@ export class CardsPlaginator implements OnInit, OnChanges {
             ingredients: repo.ingredience,
             dishType: repo.dishType,
             description: repo.description,
-            userId: Number(repo.userId),  // <-- THIS FIXES IT
+            userId: Number(repo.userId),
             liked: false,
             followed: false,
             comments: [],
@@ -119,10 +127,19 @@ export class CardsPlaginator implements OnInit, OnChanges {
               ? `data:image/png;base64,${this.arrayBufferToBase64(repo.image.data)}`
               : ''
           }));
-          console.log('Cards loaded:', this.cards); // Confirm userId here
+          this.loadAvatars(); // load avatars after cards are loaded
         }
       },
       error: (err) => console.error('Error loading repositories', err),
+    });
+  }
+
+  loadAvatars(): void {
+    this.cards.forEach(card => {
+      this.authService.getAvatar(card.userId).subscribe({
+        next: (avatarBase64) => card.avatar = avatarBase64,
+        error: () => card.avatar = 'https://material.angular.dev/assets/img/examples/shiba2.jpg' // fallback
+      });
     });
   }
 
@@ -200,6 +217,7 @@ export class CardModal {
   toggleLike() { this.data.liked = !this.data.liked; }
   toggleFollow() { this.data.followed = !this.data.followed; }
 }
+
 
 
 
