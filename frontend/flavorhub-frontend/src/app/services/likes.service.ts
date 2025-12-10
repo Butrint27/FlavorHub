@@ -1,0 +1,94 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { AuthService } from '../services/auth.service'; // adjust path if needed
+
+export interface CreateLikeDto {
+  userId?: number; // optional here — service will fill from JWT if missing
+  repositoryId: number;
+  isLiked: boolean;
+}
+
+export interface UpdateLikeDto {
+  userId?: number;
+  repositoryId?: number;
+  isLiked?: boolean;
+}
+
+export interface Like {
+  id: number;
+  user: any;
+  repository: any;
+  isLiked: boolean;
+  createdAt: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LikesService {
+  private baseUrl = 'http://localhost:3000/likes'; // change if your backend port differs
+
+  constructor(private http: HttpClient, private auth: AuthService) {}
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.auth.getToken();
+    let headers = new HttpHeaders();
+    if (token) headers = headers.set('Authorization', `Bearer ${token}`);
+    return headers;
+  }
+
+  // CREATE (will fill userId from JWT if missing)
+  create(data: CreateLikeDto): Observable<Like> {
+    const userFromStorage = this.auth.getUser();
+    const payload: CreateLikeDto = {
+      userId: data.userId ?? userFromStorage?.sub ?? undefined,
+      repositoryId: data.repositoryId,
+      isLiked: data.isLiked
+    };
+
+    if (!payload.userId) {
+      return throwError(() => new Error('No authenticated user found (missing JWT sub)'));
+    }
+
+    return this.http.post<Like>(this.baseUrl, payload, { headers: this.getAuthHeaders() })
+      .pipe(
+        catchError(err => throwError(() => err))
+      );
+  }
+
+  // GET ALL
+  findAll(): Observable<Like[]> {
+    return this.http.get<Like[]>(this.baseUrl, { headers: this.getAuthHeaders() })
+      .pipe(catchError(err => throwError(() => err)));
+  }
+
+  // GET ONE
+  findOne(id: number): Observable<Like> {
+    return this.http.get<Like>(`${this.baseUrl}/${id}`, { headers: this.getAuthHeaders() })
+      .pipe(catchError(err => throwError(() => err)));
+  }
+
+  // UPDATE
+  update(id: number, dto: UpdateLikeDto): Observable<Like> {
+    return this.http.patch<Like>(`${this.baseUrl}/${id}`, dto, { headers: this.getAuthHeaders() })
+      .pipe(catchError(err => throwError(() => err)));
+  }
+
+  // DELETE
+  remove(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`, { headers: this.getAuthHeaders() })
+      .pipe(catchError(err => throwError(() => err)));
+  }
+
+  /**
+   * Helper to toggle like for a repository.
+   * If currentState is the UI state (true = currently liked), this will send the inverted state to backend.
+   * Example: currentState = false -> will send isLiked: true
+   */
+  toggle(repositoryId: number, currentState: boolean): Observable<Like> {
+    return this.create({ repositoryId, isLiked: !currentState });
+  }
+}
+

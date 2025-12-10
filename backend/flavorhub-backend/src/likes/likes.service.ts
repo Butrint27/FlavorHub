@@ -58,6 +58,10 @@ export class LikesService {
     return like;
   }
 
+  async findLikesByUserId(userId: number): Promise<Like[]> {
+    return this.likeRepo.find({ where: { userId }, relations: ['repository'] });
+  }
+
   async update(id: number, updateLikeDto: UpdateLikeDto): Promise<Like> {
     const like = await this.findOne(id);
 

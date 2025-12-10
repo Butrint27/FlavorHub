@@ -31,4 +31,11 @@ export class LikesController {
   remove(@Param('id') id: string) {
     return this.likesService.remove(+id);
   }
+
+  // ⭐ NEW: Get all likes by a specific user
+  @Get('user/:userId')
+  findLikesByUser(@Param('userId') userId: string) {
+    return this.likesService.findLikesByUserId(+userId);
+  }
 }
+

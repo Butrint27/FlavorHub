@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { RepositoryService } from '../../services/repository.service';
 import { AuthService } from '../../services/auth.service';
-import { switchMap } from 'rxjs';
+import { LikesService } from '../../services/likes.service';
 
 export interface Card {
   id: number;
@@ -48,7 +48,8 @@ export class CardsPlaginator implements OnInit, OnChanges {
   constructor(
     private dialog: MatDialog,
     private repositoryService: RepositoryService,
-    private authService: AuthService
+    private authService: AuthService,
+    private likesService: LikesService
   ) {}
 
   ngOnInit(): void {
@@ -98,7 +99,37 @@ export class CardsPlaginator implements OnInit, OnChanges {
   prevPage() { if (this.currentPage > 0) this.currentPage--; }
   nextPage() { if (this.currentPage < this.totalPages - 1) this.currentPage++; }
 
-  toggleLike(card: Card) { card.liked = !card.liked; }
+  // ===========================
+  // LIKE BUTTON (POST) ACTION
+  // ===========================
+  toggleLike(card: Card, event?: Event) {
+    if (event) event.stopPropagation();
+
+    // get current UI value
+    const previous = !!card.liked;
+    // optimistic UI toggle
+    card.liked = !previous;
+
+    // call likes service; we don't send userId (service will read JWT)
+    this.likesService.create({
+      repositoryId: card.id,
+      isLiked: card.liked
+    }).subscribe({
+      next: (res) => {
+        // Optionally sync returned state with UI if backend returns isLiked
+        if (res && typeof res.isLiked === 'boolean') {
+          card.liked = res.isLiked;
+        }
+        // console.log('Like saved:', res);
+      },
+      error: (err) => {
+        console.error('Error saving like:', err);
+        // revert UI on failure
+        card.liked = previous;
+      }
+    });
+  }
+
   toggleFollow(card: Card) { card.followed = !card.followed; }
 
   openModal(card: Card) {
@@ -203,9 +234,9 @@ export class CommentsModal {
     <p><strong>Ingredients:</strong> {{data.ingredients}}</p>
     <p><strong>Dish Type:</strong> {{data.dishType}}</p>
     <p><strong>Description:</strong> {{data.description}}</p>
-    <div class="modal-user"><strong>User ID:</strong> {{data.userId}}</div>
+    <div class="modal-user" style="display: none"><strong>User ID:</strong> {{data.userId}}</div>
     <div class="modal-actions">
-      <button mat-icon-button (click)="toggleLike()">
+      <button mat-icon-button (click)="toggleLike(); $event.stopPropagation()">
         <mat-icon>{{ data.liked ? 'favorite' : 'favorite_border' }}</mat-icon>
       </button>
       <button mat-button color="primary" (click)="toggleFollow()">
@@ -216,9 +247,17 @@ export class CommentsModal {
   `
 })
 export class CardModal {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: Card, private dialogRef: MatDialogRef<CardModal>) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: Card, private dialogRef: MatDialogRef<CardModal>, private likesService: LikesService) {}
   close() { this.dialogRef.close(); }
-  toggleLike() { this.data.liked = !this.data.liked; }
+  toggleLike() {
+    const prev = !!this.data.liked;
+    this.data.liked = !prev;
+    // send like to backend (no userId passed -> likesService will get it from JWT)
+    this.likesService.create({ repositoryId: this.data.id, isLiked: this.data.liked }).subscribe({
+      next: (res) => { if (res && typeof res.isLiked === 'boolean') this.data.liked = res.isLiked; },
+      error: () => { this.data.liked = prev; }
+    });
+  }
   toggleFollow() { this.data.followed = !this.data.followed; }
 }
 
@@ -259,11 +298,9 @@ export class UserPreviewModal implements OnInit {
   ) {}
 
   ngOnInit() {
-    // First fetch the user info
     this.authService.getUserById(this.data.userId).subscribe({
       next: user => {
-        this.user = user; // assign fullName and email
-        // Now fetch avatar
+        this.user = user;
         this.authService.getAvatar(this.data.userId).subscribe({
           next: avatarBase64 => { if(this.user) this.user.avatar = avatarBase64; this.loading = false; },
           error: () => { this.loading = false; }
@@ -275,6 +312,7 @@ export class UserPreviewModal implements OnInit {
 
   close() { this.dialogRef.close(); }
 }
+
 
 
 

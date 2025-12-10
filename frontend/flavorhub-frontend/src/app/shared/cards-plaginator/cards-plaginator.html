@@ -23,8 +23,10 @@
       </mat-card-content>
 
       <mat-card-actions class="actions">
-        <button mat-icon-button (click)="toggleLike(card); $event.stopPropagation()">
-          <mat-icon [color]="card.liked ? 'warn' : ''">{{ card.liked ? 'favorite' : 'favorite_border' }}</mat-icon>
+        <button mat-icon-button (click)="toggleLike(card, $event)">
+          <mat-icon [color]="card.liked ? 'warn' : ''">
+            {{ card.liked ? 'favorite' : 'favorite_border' }}
+          </mat-icon>
         </button>
         <button mat-icon-button (click)="openComments(card); $event.stopPropagation()">
           <mat-icon>comment</mat-icon>
@@ -40,6 +42,7 @@
     <mat-icon>chevron_right</mat-icon>
   </button>
 </div>
+
 
 
 

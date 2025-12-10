@@ -1,6 +1,6 @@
 import { User } from "src/user/entities/user.entity";
 import { Repository } from "src/repository/entities/repository.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Like {
@@ -8,7 +8,11 @@ export class Like {
   id: number;
   
   @ManyToOne(() => User, (user) => user.like)
+  @JoinColumn({ name: 'userId' })
   user: User;
+
+  @Column()
+  userId: number;
 
   @ManyToOne(() => Repository, (repository) => repository.like)
   repository: Repository;
