@@ -64,6 +64,34 @@ export class FollowersService {
     return follower;
   }
 
+  // Get all followers (users who follow this user)
+async getFollowersByUserId(userId: number): Promise<Follower[]> {
+  const user = await this.userRepo.findOne({ where: { id: userId } });
+  if (!user) throw new NotFoundException('User not found');
+
+  return this.followerRepo
+    .createQueryBuilder('follower')
+    .leftJoinAndSelect('follower.user', 'user')           // The follower
+    .leftJoinAndSelect('follower.followsUser', 'followsUser') // The followed user
+    .where('follower.followsUser = :userId', { userId })  // Important: filter by followsUser
+    .getMany();
+}
+
+// Get all following (users this user is following)
+async getFollowingByUserId(userId: number): Promise<Follower[]> {
+  const user = await this.userRepo.findOne({ where: { id: userId } });
+  if (!user) throw new NotFoundException('User not found');
+
+  return this.followerRepo
+    .createQueryBuilder('follower')
+    .leftJoinAndSelect('follower.user', 'user')           // The follower
+    .leftJoinAndSelect('follower.followsUser', 'followsUser') // The followed user
+    .where('follower.user = :userId', { userId })        // Important: filter by user
+    .getMany();
+}
+
+
+
   // Update a follower relationship
   async update(id: number, dto: UpdateFollowerDto): Promise<Follower> {
     const follower = await this.followerRepo.findOne({ where: { id } });

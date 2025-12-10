@@ -22,6 +22,18 @@ export class FollowersController {
     return this.followersService.findOne(+id);
   }
 
+  // Followers
+  @Get('user/:userId/followers')
+  getFollowersByUserId(@Param('userId') userId: string) {
+    return this.followersService.getFollowersByUserId(+userId);
+  }
+
+   // Following
+  @Get('user/:userId/following')
+  getFollowingByUserId(@Param('userId') userId: string) {
+     return this.followersService.getFollowingByUserId(+userId);
+   }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateFollowerDto) {
     return this.followersService.update(+id, dto);

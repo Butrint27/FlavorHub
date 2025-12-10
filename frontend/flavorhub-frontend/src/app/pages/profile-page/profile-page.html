@@ -21,11 +21,11 @@
   </div>
   <div class="profile-item">
     <span class="profile-label">Followers:</span>
-    <span class="profile-value">0</span>
+    <span class="profile-value">{{ followersCount() }}</span>
   </div>
   <div class="profile-item">
     <span class="profile-label">Following:</span>
-    <span class="profile-value">0</span>
+    <span class="profile-value">{{ followingCount() }}</span>
   </div>
 </div>
 
@@ -63,6 +63,7 @@
     <button class="confirm-btn" (click)="updateProfile(fullNameInput, emailInput, passwordInput)">Confirm</button>
   </div>
 </div>
+
 
 
 

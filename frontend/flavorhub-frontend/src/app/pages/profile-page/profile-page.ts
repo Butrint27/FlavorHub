@@ -1,6 +1,7 @@
 import { Component, signal, OnInit } from '@angular/core';
 import { ToolbarMenu } from "../../shared/toolbar-menu/toolbar-menu";
 import { AuthService } from '../../services/auth.service';
+import { FollowersService } from '../../services/followers.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -14,10 +15,16 @@ export class ProfilePage implements OnInit {
   fullName = signal('');
   email = signal('');
 
+  followersCount = signal(0);
+  followingCount = signal(0);
+
   isModalOpen = signal(false);
   selectedFile: File | null = null;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private followersService: FollowersService
+  ) {}
 
   ngOnInit() {
     const user = this.authService.getUser();
@@ -37,6 +44,15 @@ export class ProfilePage implements OnInit {
     this.authService.fetchUser().subscribe(res => {
       if (res.fullName) this.fullName.set(res.fullName);
       if (res.email) this.email.set(res.email);
+    });
+
+    // Fetch followers and following counts
+    this.followersService.getFollowersByUserId(user.sub).subscribe(followers => {
+      this.followersCount.set(followers.length);
+    });
+
+    this.followersService.getFollowingByUserId(user.sub).subscribe(following => {
+      this.followingCount.set(following.length);
     });
   }
 
@@ -83,6 +99,7 @@ export class ProfilePage implements OnInit {
     });
   }
 }
+
 
 
 

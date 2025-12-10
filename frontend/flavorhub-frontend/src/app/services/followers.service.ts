@@ -37,6 +37,16 @@ export class FollowersService {
     return this.http.get<Follower>(`${this.API_URL}/${id}`);
   }
 
+  // Get all followers for a specific user
+  getFollowersByUserId(userId: number): Observable<Follower[]> {
+    return this.http.get<Follower[]>(`${this.API_URL}/user/${userId}/followers`);
+  }
+
+  // Get all following for a specific user
+  getFollowingByUserId(userId: number): Observable<Follower[]> {
+    return this.http.get<Follower[]>(`${this.API_URL}/user/${userId}/following`);
+  }
+
   // Create a follower relationship
   create(dto: CreateFollowerDto): Observable<Follower> {
     return this.http.post<Follower>(this.API_URL, dto);
