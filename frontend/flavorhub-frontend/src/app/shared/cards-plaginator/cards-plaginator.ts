@@ -191,28 +191,61 @@ export class CardsPlaginator implements OnInit, OnChanges {
   selector: 'comments-modal',
   standalone: true,
   imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, FormsModule],
+  styleUrls: ['./cards-plaginator.css'],
   template: `
-    <div class="modal-container">
+    <div class="comments-modal-container">
       <h2 class="title">Comments</h2>
-      <div class="comments-box">
-        <div *ngFor="let c of data.comments" class="comment-item">{{ c }}</div>
+
+      <div class="comments-box" *ngIf="data.comments?.length; else noComments">
+        <div *ngFor="let c of data.comments" class="comment-item">
+          <mat-icon class="comment-icon">account_circle</mat-icon>
+          <span>{{ c }}</span>
+        </div>
       </div>
+
+      <ng-template #noComments>
+        <p class="no-comments">No comments yet. Be the first to comment!</p>
+      </ng-template>
+
       <div class="input-container">
-        <input type="text" placeholder="Write a comment..." [(ngModel)]="newComment">
-        <button mat-icon-button (click)="addComment()"><mat-icon>send</mat-icon></button>
+        <input
+          type="text"
+          placeholder="Write a comment..."
+          [(ngModel)]="newComment"
+          (keydown.enter)="addComment()"
+        />
+        <button mat-icon-button color="primary" aria-label="Send comment" (click)="addComment()">
+          <mat-icon>send</mat-icon>
+        </button>
       </div>
-      <div class="actions"><button mat-button (click)="close()">Close</button></div>
+
+      <div class="comments-actions">
+        <button mat-stroked-button color="warn" (click)="close()">Close</button>
+      </div>
     </div>
   `
 })
 export class CommentsModal {
   newComment = '';
-  constructor(@Inject(MAT_DIALOG_DATA) public data: Card, private dialogRef: MatDialogRef<CommentsModal>) {}
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: Card,
+    private dialogRef: MatDialogRef<CommentsModal>
+  ) {}
+
   addComment() {
-    if (this.newComment.trim()) { this.data.comments?.push(this.newComment.trim()); this.newComment = ''; }
+    const trimmed = this.newComment.trim();
+    if (trimmed) {
+      this.data.comments = this.data.comments || [];
+      this.data.comments.push(trimmed);
+      this.newComment = '';
+    }
   }
-  close() { this.dialogRef.close(); }
+
+  close() {
+    this.dialogRef.close();
+  }
 }
+
 
 /* ================= CARD MODAL ================= */
 @Component({
