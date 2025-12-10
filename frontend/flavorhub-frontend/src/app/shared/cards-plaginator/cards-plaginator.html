@@ -18,15 +18,11 @@
         <p><strong>Ingredients:</strong> {{ card.ingredients }}</p>
         <p><strong>Dish Type:</strong> {{ card.dishType }}</p>
         <p><strong>Description:</strong> {{ card.description | slice:0:60 }}...</p>
-        <div class="card-user" style="display:none"><strong>User ID:</strong> {{ card.userId }}</div>
-        <p><strong>Repo ID:</strong> {{card.id}}</p>
       </mat-card-content>
 
       <mat-card-actions class="actions">
         <button mat-icon-button (click)="toggleLike(card, $event)">
-          <mat-icon [color]="card.liked ? 'warn' : ''">
-            {{ card.liked ? 'favorite' : 'favorite_border' }}
-          </mat-icon>
+          <mat-icon [color]="card.liked ? 'warn' : ''">{{ card.liked ? 'favorite' : 'favorite_border' }}</mat-icon>
         </button>
         <button mat-icon-button (click)="openComments(card); $event.stopPropagation()">
           <mat-icon>comment</mat-icon>
@@ -42,6 +38,7 @@
     <mat-icon>chevron_right</mat-icon>
   </button>
 </div>
+
 
 
 

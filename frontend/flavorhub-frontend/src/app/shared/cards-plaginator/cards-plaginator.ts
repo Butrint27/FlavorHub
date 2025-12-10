@@ -56,6 +56,9 @@ export class CardsPlaginator implements OnInit, OnChanges {
     this.updateCardsPerPage();
     if (!this.allCards) this.loadCards();
     else this.cards = this.allCards;
+
+    // load likes after cards are ready
+    this.loadLikes();
   }
 
   ngOnChanges(): void {
@@ -64,13 +67,12 @@ export class CardsPlaginator implements OnInit, OnChanges {
       this.currentPage = 0;
       this.updateCardsPerPage();
       this.loadAvatars();
+      this.loadLikes();
     }
   }
 
   @HostListener('window:resize')
-  onResize(): void {
-    this.updateCardsPerPage(true);
-  }
+  onResize(): void { this.updateCardsPerPage(true); }
 
   updateCardsPerPage(keepVisibleCard = false): void {
     const width = window.innerWidth;
@@ -87,9 +89,7 @@ export class CardsPlaginator implements OnInit, OnChanges {
     if (this.currentPage >= this.totalPages) this.currentPage = this.totalPages - 1;
   }
 
-  get totalPages() {
-    return Math.ceil(this.cards.length / this.cardsPerPage);
-  }
+  get totalPages() { return Math.ceil(this.cards.length / this.cardsPerPage); }
 
   get visibleCards() {
     const start = this.currentPage * this.cardsPerPage;
@@ -104,45 +104,22 @@ export class CardsPlaginator implements OnInit, OnChanges {
   // ===========================
   toggleLike(card: Card, event?: Event) {
     if (event) event.stopPropagation();
-
-    // get current UI value
     const previous = !!card.liked;
-    // optimistic UI toggle
     card.liked = !previous;
 
-    // call likes service; we don't send userId (service will read JWT)
-    this.likesService.create({
-      repositoryId: card.id,
-      isLiked: card.liked
-    }).subscribe({
-      next: (res) => {
-        // Optionally sync returned state with UI if backend returns isLiked
-        if (res && typeof res.isLiked === 'boolean') {
-          card.liked = res.isLiked;
-        }
-        // console.log('Like saved:', res);
-      },
-      error: (err) => {
-        console.error('Error saving like:', err);
-        // revert UI on failure
-        card.liked = previous;
-      }
+    this.likesService.create({ repositoryId: card.id, isLiked: card.liked }).subscribe({
+      next: (res) => { if (res && typeof res.isLiked === 'boolean') card.liked = res.isLiked; },
+      error: () => { card.liked = previous; }
     });
   }
 
   toggleFollow(card: Card) { card.followed = !card.followed; }
 
-  openModal(card: Card) {
-    this.dialog.open(CardModal, { data: card, width: '95%', maxWidth: '650px' });
-  }
+  openModal(card: Card) { this.dialog.open(CardModal, { data: card, width: '95%', maxWidth: '650px' }); }
 
-  openComments(card: Card) {
-    this.dialog.open(CommentsModal, { data: card, width: '95%', maxWidth: '650px' });
-  }
+  openComments(card: Card) { this.dialog.open(CommentsModal, { data: card, width: '95%', maxWidth: '650px' }); }
 
-  openUserModal(userId: number) {
-    this.dialog.open(UserPreviewModal, { data: { userId }, width: '95%', maxWidth: '380px' });
-  }
+  openUserModal(userId: number) { this.dialog.open(UserPreviewModal, { data: { userId }, width: '95%', maxWidth: '380px' }); }
 
   loadCards(): void {
     this.repositoryService.getAllRepositories().subscribe({
@@ -158,9 +135,7 @@ export class CardsPlaginator implements OnInit, OnChanges {
             liked: false,
             followed: false,
             comments: [],
-            image: repo.image?.data
-              ? `data:image/png;base64,${this.arrayBufferToBase64(repo.image.data)}`
-              : ''
+            image: repo.image?.data ? `data:image/png;base64,${this.arrayBufferToBase64(repo.image.data)}` : ''
           }));
           this.loadAvatars();
         }
@@ -169,11 +144,23 @@ export class CardsPlaginator implements OnInit, OnChanges {
     });
   }
 
+  loadLikes(): void {
+    this.likesService.getLikesByUser().subscribe({
+      next: (likes) => {
+        likes.forEach(like => {
+          const card = this.cards.find(c => c.id === like.repository.id);
+          if (card) card.liked = like.isLiked;
+        });
+      },
+      error: err => console.error('Error loading likes', err)
+    });
+  }
+
   loadAvatars(): void {
     this.cards.forEach(card => {
       this.authService.getAvatar(card.userId).subscribe({
-        next: (avatarBase64) => card.avatar = avatarBase64,
-        error: () => card.avatar = '' // leave empty if fails
+        next: avatarBase64 => card.avatar = avatarBase64,
+        error: () => card.avatar = ''
       });
     });
   }
@@ -201,13 +188,9 @@ export class CardsPlaginator implements OnInit, OnChanges {
       </div>
       <div class="input-container">
         <input type="text" placeholder="Write a comment..." [(ngModel)]="newComment">
-        <button mat-icon-button (click)="addComment()">
-          <mat-icon>send</mat-icon>
-        </button>
+        <button mat-icon-button (click)="addComment()"><mat-icon>send</mat-icon></button>
       </div>
-      <div class="actions">
-        <button mat-button (click)="close()">Close</button>
-      </div>
+      <div class="actions"><button mat-button (click)="close()">Close</button></div>
     </div>
   `
 })
@@ -215,10 +198,7 @@ export class CommentsModal {
   newComment = '';
   constructor(@Inject(MAT_DIALOG_DATA) public data: Card, private dialogRef: MatDialogRef<CommentsModal>) {}
   addComment() {
-    if (this.newComment.trim()) {
-      this.data.comments?.push(this.newComment.trim());
-      this.newComment = '';
-    }
+    if (this.newComment.trim()) { this.data.comments?.push(this.newComment.trim()); this.newComment = ''; }
   }
   close() { this.dialogRef.close(); }
 }
@@ -252,7 +232,6 @@ export class CardModal {
   toggleLike() {
     const prev = !!this.data.liked;
     this.data.liked = !prev;
-    // send like to backend (no userId passed -> likesService will get it from JWT)
     this.likesService.create({ repositoryId: this.data.id, isLiked: this.data.liked }).subscribe({
       next: (res) => { if (res && typeof res.isLiked === 'boolean') this.data.liked = res.isLiked; },
       error: () => { this.data.liked = prev; }
@@ -312,6 +291,7 @@ export class UserPreviewModal implements OnInit {
 
   close() { this.dialogRef.close(); }
 }
+
 
 
 
