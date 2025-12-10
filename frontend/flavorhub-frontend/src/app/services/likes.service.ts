@@ -39,7 +39,7 @@ export class LikesService {
     return headers;
   }
 
-  // CREATE or toggle like (fills userId from JWT if missing)
+  // CREATE a new like (fills userId from JWT if missing)
   create(data: CreateLikeDto): Observable<Like> {
     const userFromStorage = this.auth.getUser();
     const payload: CreateLikeDto = {
@@ -51,6 +51,15 @@ export class LikesService {
     if (!payload.userId) return throwError(() => new Error('No authenticated user found'));
 
     return this.http.post<Like>(this.baseUrl, payload, { headers: this.getAuthHeaders() })
+      .pipe(catchError(err => throwError(() => err)));
+  }
+
+  // PATCH a like by userId + repositoryId (matches backend)
+  updateLikeByUser(userId: number, repositoryId: number, isLiked: boolean): Observable<Like> {
+    if (!repositoryId) return throwError(() => new Error('repositoryId is required'));
+    const payload: UpdateLikeDto = { repositoryId, isLiked };
+
+    return this.http.patch<Like>(`${this.baseUrl}/user/${userId}`, payload, { headers: this.getAuthHeaders() })
       .pipe(catchError(err => throwError(() => err)));
   }
 
@@ -88,5 +97,6 @@ export class LikesService {
       .pipe(catchError(err => throwError(() => err)));
   }
 }
+
 
 

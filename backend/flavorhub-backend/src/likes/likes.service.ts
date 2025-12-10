@@ -81,6 +81,22 @@ export class LikesService {
     return this.likeRepo.save(like);
   }
 
+ async updateLikeByUserId(userId: number, updateLikeDto: UpdateLikeDto): Promise<Like> {
+  if (!updateLikeDto.repositoryId) throw new Error('repositoryId is required to identify the like');
+
+  let like = await this.likeRepo.findOne({
+    where: { userId, repository: { id: updateLikeDto.repositoryId } },
+    relations: ['user', 'repository']
+  });
+
+  if (!like) throw new Error('Like not found for this user and repository');
+
+  if (updateLikeDto.isLiked !== undefined) like.isLiked = updateLikeDto.isLiked;
+
+  return this.likeRepo.save(like);
+}
+
+
   async remove(id: number): Promise<void> {
     const like = await this.findOne(id);
     await this.likeRepo.remove(like);

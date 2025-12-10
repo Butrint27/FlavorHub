@@ -27,6 +27,14 @@ export class LikesController {
     return this.likesService.update(+id, updateLikeDto);
   }
 
+  @Patch('user/:userId')
+  updateByUserId(
+  @Param('userId') userId: string,
+  @Body() updateLikeDto: UpdateLikeDto
+   ) {
+     return this.likesService.updateLikeByUserId(+userId, updateLikeDto);
+   }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.likesService.remove(+id);

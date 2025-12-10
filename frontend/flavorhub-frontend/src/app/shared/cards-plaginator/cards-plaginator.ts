@@ -57,7 +57,6 @@ export class CardsPlaginator implements OnInit, OnChanges {
     if (!this.allCards) this.loadCards();
     else this.cards = this.allCards;
 
-    // load likes after cards are ready
     this.loadLikes();
   }
 
@@ -100,17 +99,29 @@ export class CardsPlaginator implements OnInit, OnChanges {
   nextPage() { if (this.currentPage < this.totalPages - 1) this.currentPage++; }
 
   // ===========================
-  // LIKE BUTTON (POST) ACTION
+  // LIKE BUTTON ACTION (CREATE / UPDATE)
   // ===========================
   toggleLike(card: Card, event?: Event) {
     if (event) event.stopPropagation();
     const previous = !!card.liked;
     card.liked = !previous;
 
-    this.likesService.create({ repositoryId: card.id, isLiked: card.liked }).subscribe({
-      next: (res) => { if (res && typeof res.isLiked === 'boolean') card.liked = res.isLiked; },
-      error: () => { card.liked = previous; }
-    });
+    const user = this.authService.getUser();
+    if (!user?.sub) { card.liked = previous; return; }
+
+    if (previous) {
+      // Existing like → update
+      this.likesService.updateLikeByUser(user.sub, card.id, card.liked).subscribe({
+        next: res => { if (res && typeof res.isLiked === 'boolean') card.liked = res.isLiked; },
+        error: () => { card.liked = previous; }
+      });
+    } else {
+      // New like → create
+      this.likesService.create({ repositoryId: card.id, isLiked: card.liked }).subscribe({
+        next: res => { if (res && typeof res.isLiked === 'boolean') card.liked = res.isLiked; },
+        error: () => { card.liked = previous; }
+      });
+    }
   }
 
   toggleFollow(card: Card) { card.followed = !card.followed; }
@@ -227,16 +238,35 @@ export class CommentsModal {
   `
 })
 export class CardModal {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: Card, private dialogRef: MatDialogRef<CardModal>, private likesService: LikesService) {}
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: Card,
+    private dialogRef: MatDialogRef<CardModal>,
+    private likesService: LikesService,
+    private authService: AuthService
+  ) {}
+
   close() { this.dialogRef.close(); }
+
   toggleLike() {
     const prev = !!this.data.liked;
     this.data.liked = !prev;
-    this.likesService.create({ repositoryId: this.data.id, isLiked: this.data.liked }).subscribe({
-      next: (res) => { if (res && typeof res.isLiked === 'boolean') this.data.liked = res.isLiked; },
-      error: () => { this.data.liked = prev; }
-    });
+
+    const user = this.authService.getUser();
+    if (!user?.sub) { this.data.liked = prev; return; }
+
+    if (prev) {
+      this.likesService.updateLikeByUser(user.sub, this.data.id, this.data.liked).subscribe({
+        next: res => { if (res && typeof res.isLiked === 'boolean') this.data.liked = res.isLiked; },
+        error: () => { this.data.liked = prev; }
+      });
+    } else {
+      this.likesService.create({ repositoryId: this.data.id, isLiked: this.data.liked }).subscribe({
+        next: res => { if (res && typeof res.isLiked === 'boolean') this.data.liked = res.isLiked; },
+        error: () => { this.data.liked = prev; }
+      });
+    }
   }
+
   toggleFollow() { this.data.followed = !this.data.followed; }
 }
 
@@ -291,6 +321,7 @@ export class UserPreviewModal implements OnInit {
 
   close() { this.dialogRef.close(); }
 }
+
 
 
 
