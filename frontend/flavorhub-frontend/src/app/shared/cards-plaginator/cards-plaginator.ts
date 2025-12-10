@@ -10,6 +10,7 @@ import { RepositoryService } from '../../services/repository.service';
 import { AuthService } from '../../services/auth.service';
 import { LikesService } from '../../services/likes.service';
 import { CommentsService, CreateCommentDto, Comment } from '../../services/comments.service';
+import { FollowersService } from '../../services/followers.service';
 
 export interface Card {
   id: number;
@@ -50,7 +51,8 @@ export class CardsPlaginator implements OnInit, OnChanges {
     private dialog: MatDialog,
     private repositoryService: RepositoryService,
     private authService: AuthService,
-    private likesService: LikesService
+    private likesService: LikesService,
+    private followersService: FollowersService
   ) {}
 
   ngOnInit(): void {
@@ -125,8 +127,50 @@ export class CardsPlaginator implements OnInit, OnChanges {
     }
   }
 
-  toggleFollow(card: Card) { card.followed = !card.followed; }
+  toggleFollow(card: Card, event?: Event) {
+  if (event) event.stopPropagation(); // prevent card click from triggering parent events
 
+  const user = this.authService.getUser();
+  if (!user?.sub) {
+    console.error('User not logged in');
+    return;
+  }
+
+  const userId = user.sub;
+  const followsUserId = card.userId;
+
+  // Prevent following yourself
+  if (userId === followsUserId) {
+    console.warn('Cannot follow yourself');
+    return;
+  }
+
+  // Prevent duplicate follow
+  if (card.followed) {
+    console.warn('Already following this user');
+    return;
+  }
+
+  // Optimistic UI update
+  const prevState = !!card.followed;
+  card.followed = true;
+
+  const dto = { userId, followsUserId };
+
+  this.followersService.create(dto).subscribe({
+    next: () => {
+      // Successfully followed, card.followed already true
+      console.log(`Successfully followed user ${followsUserId}`);
+    },
+    error: (err) => {
+      console.error('Error following user', err);
+      // Rollback UI
+      card.followed = prevState;
+    }
+  });
+}
+
+  
   openModal(card: Card) { this.dialog.open(CardModal, { data: card, width: '95%', maxWidth: '650px' }); }
 
   openComments(card: Card) { this.dialog.open(CommentsModal, { data: card, width: '95%', maxWidth: '650px' }); }

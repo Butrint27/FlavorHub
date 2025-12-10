@@ -39,7 +39,7 @@
         </button>
 
         <!-- Follow Button -->
-        <button mat-button color="primary" (click)="toggleFollow(card); $event.stopPropagation()">
+        <button mat-button color="primary" (click)="toggleFollow(card, $event)">
           {{ card.followed ? 'Following' : 'Follow' }}
         </button>
       </mat-card-actions>
