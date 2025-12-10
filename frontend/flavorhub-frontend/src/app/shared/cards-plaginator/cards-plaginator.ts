@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { RepositoryService } from '../../services/repository.service';
 import { AuthService } from '../../services/auth.service';
 import { LikesService } from '../../services/likes.service';
+import { CommentsService, CreateCommentDto, Comment } from '../../services/comments.service';
 
 export interface Card {
   id: number;
@@ -190,16 +191,15 @@ export class CardsPlaginator implements OnInit, OnChanges {
 @Component({
   selector: 'comments-modal',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, FormsModule],
-  styleUrls: ['./cards-plaginator.css'],
+  imports: [CommonModule, MatButtonModule, MatIconModule, FormsModule],
   template: `
     <div class="comments-modal-container">
       <h2 class="title">Comments</h2>
 
-      <div class="comments-box" *ngIf="data.comments?.length; else noComments">
-        <div *ngFor="let c of data.comments" class="comment-item">
+      <div class="comments-box" *ngIf="comments?.length; else noComments">
+        <div *ngFor="let c of comments" class="comment-item">
           <mat-icon class="comment-icon">account_circle</mat-icon>
-          <span>{{ c }}</span>
+          <span>{{ c.user?.fullName || 'Unknown' }}: {{ c.content }}</span>
         </div>
       </div>
 
@@ -223,25 +223,62 @@ export class CardsPlaginator implements OnInit, OnChanges {
         <button mat-stroked-button color="warn" (click)="close()">Close</button>
       </div>
     </div>
-  `
+  `,
+  styleUrls: ['./cards-plaginator.css']
 })
-export class CommentsModal {
-  newComment = '';
+export class CommentsModal implements OnInit {
+  newComment: string = '';
+  comments: Comment[] = [];
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Card,
-    private dialogRef: MatDialogRef<CommentsModal>
+    private dialogRef: MatDialogRef<CommentsModal>,
+    private commentsService: CommentsService,
+    private authService: AuthService
   ) {}
 
-  addComment() {
-    const trimmed = this.newComment.trim();
-    if (trimmed) {
-      this.data.comments = this.data.comments || [];
-      this.data.comments.push(trimmed);
-      this.newComment = '';
-    }
+  ngOnInit(): void {
+    this.loadComments();
   }
 
-  close() {
+  loadComments(): void {
+    if (!this.data.id) return;
+
+    this.commentsService.getCommentsByRepository(this.data.id).subscribe({
+      next: (res: Comment[]) => this.comments = res,
+      error: err => {
+        console.error('Error loading comments', err);
+        this.comments = [];
+      }
+    });
+  }
+
+  addComment(): void {
+    const trimmed = this.newComment.trim();
+    if (!trimmed) return;
+
+    const user = this.authService.getUser();
+    if (!user?.sub) {
+      console.error('User not logged in');
+      return;
+    }
+
+    const dto: CreateCommentDto = {
+      content: trimmed,
+      userId: user.sub,
+      repositoryId: this.data.id
+    };
+
+    this.commentsService.createComment(dto).subscribe({
+      next: (res: Comment) => {
+        this.comments.push(res); // add the new comment
+        this.newComment = '';
+      },
+      error: err => console.error('Error posting comment', err)
+    });
+  }
+
+  close(): void {
     this.dialogRef.close();
   }
 }
