@@ -7,6 +7,7 @@ import { RepositoryModule } from './repository/repository.module';
 import { LikesModule } from './likes/likes.module';
 import { FollowersModule } from './followers/followers.module';
 import { CommentsModule } from './comments/comments.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
