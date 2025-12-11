@@ -23,6 +23,7 @@ export interface Card {
   avatar?: string;
   liked?: boolean;
   followed?: boolean;
+  followerRecordId?: number; // store DB record ID for unfollow
   comments?: string[];
 }
 
@@ -135,8 +136,11 @@ export class CardsPlaginator implements OnInit, OnChanges {
 
     this.followersService.findByUserId(user.sub).subscribe({
       next: (follows: Follower[]) => {
-        const followedIds = follows.map(f => f.followsUser.id);
-        this.cards.forEach(card => card.followed = followedIds.includes(card.userId));
+        this.cards.forEach(card => {
+          const match = follows.find(f => f.followsUser.id === card.userId);
+          card.followed = !!match;
+          card.followerRecordId = match?.id;
+        });
       },
       error: err => console.error('Error loading followed users', err)
     });
@@ -145,18 +149,35 @@ export class CardsPlaginator implements OnInit, OnChanges {
   toggleFollow(card: Card, event?: Event) {
     if (event) event.stopPropagation();
     const user = this.authService.getUser();
-    if (!user?.sub || card.userId === user.sub) return;
+    if (!user?.sub) return;
 
-    if (card.followed) return; // already following
+    // Alert if following yourself
+    if (card.userId === user.sub) {
+      alert("❌ You can't follow yourself!");
+      return;
+    }
 
-    const prev = card.followed;
-    card.followed = true;
+    if (card.followed) {
+      // Unfollow
+      if (!card.followerRecordId) return;
+      const prev = card.followed;
+      card.followed = false;
 
-    const dto = { userId: user.sub, followsUserId: card.userId };
-    this.followersService.create(dto).subscribe({
-      next: () => console.log(`Followed user ${card.userId}`),
-      error: () => card.followed = prev
-    });
+      this.followersService.delete(card.followerRecordId).subscribe({
+        next: () => card.followerRecordId = undefined,
+        error: () => card.followed = prev
+      });
+    } else {
+      // Follow
+      const prev = card.followed;
+      card.followed = true;
+
+      const dto = { userId: user.sub, followsUserId: card.userId };
+      this.followersService.create(dto).subscribe({
+        next: (res) => card.followerRecordId = res.id,
+        error: () => card.followed = prev
+      });
+    }
   }
 
   // ===========================
@@ -220,6 +241,7 @@ export class CardsPlaginator implements OnInit, OnChanges {
     return window.btoa(binary);
   }
 }
+
 
 
 /* ================= COMMENTS MODAL ================= */
