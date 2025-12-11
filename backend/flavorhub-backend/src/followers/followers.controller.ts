@@ -12,27 +12,23 @@ export class FollowersController {
     return this.followersService.create(dto);
   }
 
-  @Get()
-  findAll() {
-    return this.followersService.findAll();
+  // GET /followers/user/:userId -> all follower records for this user
+  @Get('user/:userId')
+  findByUserId(@Param('userId') userId: string) {
+    return this.followersService.findByUserId(+userId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.followersService.findOne(+id);
-  }
-
-  // Followers
+  // GET /followers/user/:userId/followers -> users following this user
   @Get('user/:userId/followers')
   getFollowersByUserId(@Param('userId') userId: string) {
     return this.followersService.getFollowersByUserId(+userId);
   }
 
-   // Following
+  // GET /followers/user/:userId/following -> users this user is following
   @Get('user/:userId/following')
   getFollowingByUserId(@Param('userId') userId: string) {
-     return this.followersService.getFollowingByUserId(+userId);
-   }
+    return this.followersService.getFollowingByUserId(+userId);
+  }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateFollowerDto) {
@@ -44,5 +40,6 @@ export class FollowersController {
     return this.followersService.remove(+id);
   }
 }
+
 
 

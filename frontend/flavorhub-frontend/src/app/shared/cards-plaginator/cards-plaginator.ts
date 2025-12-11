@@ -10,7 +10,7 @@ import { RepositoryService } from '../../services/repository.service';
 import { AuthService } from '../../services/auth.service';
 import { LikesService } from '../../services/likes.service';
 import { CommentsService, CreateCommentDto, Comment } from '../../services/comments.service';
-import { FollowersService } from '../../services/followers.service';
+import { FollowersService, Follower } from '../../services/followers.service';
 
 export interface Card {
   id: number;
@@ -70,6 +70,7 @@ export class CardsPlaginator implements OnInit, OnChanges {
       this.updateCardsPerPage();
       this.loadAvatars();
       this.loadLikes();
+      this.loadFollowedUsers();
     }
   }
 
@@ -102,7 +103,7 @@ export class CardsPlaginator implements OnInit, OnChanges {
   nextPage() { if (this.currentPage < this.totalPages - 1) this.currentPage++; }
 
   // ===========================
-  // LIKE BUTTON ACTION (CREATE / UPDATE)
+  // LIKE BUTTON ACTION
   // ===========================
   toggleLike(card: Card, event?: Event) {
     if (event) event.stopPropagation();
@@ -113,13 +114,11 @@ export class CardsPlaginator implements OnInit, OnChanges {
     if (!user?.sub) { card.liked = previous; return; }
 
     if (previous) {
-      // Existing like → update
       this.likesService.updateLikeByUser(user.sub, card.id, card.liked).subscribe({
         next: res => { if (res && typeof res.isLiked === 'boolean') card.liked = res.isLiked; },
         error: () => { card.liked = previous; }
       });
     } else {
-      // New like → create
       this.likesService.create({ repositoryId: card.id, isLiked: card.liked }).subscribe({
         next: res => { if (res && typeof res.isLiked === 'boolean') card.liked = res.isLiked; },
         error: () => { card.liked = previous; }
@@ -127,54 +126,44 @@ export class CardsPlaginator implements OnInit, OnChanges {
     }
   }
 
+  // ===========================
+  // FOLLOW BUTTON ACTION
+  // ===========================
+  loadFollowedUsers(): void {
+    const user = this.authService.getUser();
+    if (!user?.sub) return;
+
+    this.followersService.findByUserId(user.sub).subscribe({
+      next: (follows: Follower[]) => {
+        const followedIds = follows.map(f => f.followsUser.id);
+        this.cards.forEach(card => card.followed = followedIds.includes(card.userId));
+      },
+      error: err => console.error('Error loading followed users', err)
+    });
+  }
+
   toggleFollow(card: Card, event?: Event) {
-  if (event) event.stopPropagation(); // prevent card click from triggering parent events
+    if (event) event.stopPropagation();
+    const user = this.authService.getUser();
+    if (!user?.sub || card.userId === user.sub) return;
 
-  const user = this.authService.getUser();
-  if (!user?.sub) {
-    console.error('User not logged in');
-    return;
+    if (card.followed) return; // already following
+
+    const prev = card.followed;
+    card.followed = true;
+
+    const dto = { userId: user.sub, followsUserId: card.userId };
+    this.followersService.create(dto).subscribe({
+      next: () => console.log(`Followed user ${card.userId}`),
+      error: () => card.followed = prev
+    });
   }
 
-  const userId = user.sub;
-  const followsUserId = card.userId;
-
-  // Prevent following yourself
-  if (userId === followsUserId) {
-    console.warn('Cannot follow yourself');
-    return;
-  }
-
-  // Prevent duplicate follow
-  if (card.followed) {
-    console.warn('Already following this user');
-    return;
-  }
-
-  // Optimistic UI update
-  const prevState = !!card.followed;
-  card.followed = true;
-
-  const dto = { userId, followsUserId };
-
-  this.followersService.create(dto).subscribe({
-    next: () => {
-      // Successfully followed, card.followed already true
-      console.log(`Successfully followed user ${followsUserId}`);
-    },
-    error: (err) => {
-      console.error('Error following user', err);
-      // Rollback UI
-      card.followed = prevState;
-    }
-  });
-}
-
-  
+  // ===========================
+  // MODALS
+  // ===========================
   openModal(card: Card) { this.dialog.open(CardModal, { data: card, width: '95%', maxWidth: '650px' }); }
-
   openComments(card: Card) { this.dialog.open(CommentsModal, { data: card, width: '95%', maxWidth: '650px' }); }
-
   openUserModal(userId: number) { this.dialog.open(UserPreviewModal, { data: { userId }, width: '95%', maxWidth: '380px' }); }
 
   loadCards(): void {
@@ -194,6 +183,7 @@ export class CardsPlaginator implements OnInit, OnChanges {
             image: repo.image?.data ? `data:image/png;base64,${this.arrayBufferToBase64(repo.image.data)}` : ''
           }));
           this.loadAvatars();
+          this.loadFollowedUsers(); // mark followed users here
         }
       },
       error: (err) => console.error('Error loading repositories', err),
@@ -202,7 +192,7 @@ export class CardsPlaginator implements OnInit, OnChanges {
 
   loadLikes(): void {
     this.likesService.getLikesByUser().subscribe({
-      next: (likes) => {
+      next: likes => {
         likes.forEach(like => {
           const card = this.cards.find(c => c.id === like.repository.id);
           if (card) card.liked = like.isLiked;
@@ -230,6 +220,7 @@ export class CardsPlaginator implements OnInit, OnChanges {
     return window.btoa(binary);
   }
 }
+
 
 /* ================= COMMENTS MODAL ================= */
 @Component({

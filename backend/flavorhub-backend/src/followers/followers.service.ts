@@ -42,57 +42,46 @@ export class FollowersService {
     return this.followerRepo.save(follower);
   }
 
-  // Get all follower relationships
-  async findAll(): Promise<Follower[]> {
+  // Get all follower records for a given userId (as the follower)
+  async findByUserId(userId: number): Promise<Follower[]> {
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) throw new NotFoundException('User not found');
+
     return this.followerRepo
       .createQueryBuilder('follower')
       .leftJoinAndSelect('follower.user', 'user')
       .leftJoinAndSelect('follower.followsUser', 'followsUser')
+      .where('follower.user = :userId', { userId })
       .getMany();
   }
 
-  // Get one follower by ID
-  async findOne(id: number): Promise<Follower> {
-    const follower = await this.followerRepo
+  // Get all followers of this user (users who follow this user)
+  async getFollowersByUserId(userId: number): Promise<Follower[]> {
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) throw new NotFoundException('User not found');
+
+    return this.followerRepo
       .createQueryBuilder('follower')
       .leftJoinAndSelect('follower.user', 'user')
       .leftJoinAndSelect('follower.followsUser', 'followsUser')
-      .where('follower.id = :id', { id })
-      .getOne();
-
-    if (!follower) throw new NotFoundException('Follower not found');
-    return follower;
+      .where('follower.followsUser = :userId', { userId })
+      .getMany();
   }
 
-  // Get all followers (users who follow this user)
-async getFollowersByUserId(userId: number): Promise<Follower[]> {
-  const user = await this.userRepo.findOne({ where: { id: userId } });
-  if (!user) throw new NotFoundException('User not found');
+  // Get all users this user is following
+  async getFollowingByUserId(userId: number): Promise<Follower[]> {
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) throw new NotFoundException('User not found');
 
-  return this.followerRepo
-    .createQueryBuilder('follower')
-    .leftJoinAndSelect('follower.user', 'user')           // The follower
-    .leftJoinAndSelect('follower.followsUser', 'followsUser') // The followed user
-    .where('follower.followsUser = :userId', { userId })  // Important: filter by followsUser
-    .getMany();
-}
+    return this.followerRepo
+      .createQueryBuilder('follower')
+      .leftJoinAndSelect('follower.user', 'user')
+      .leftJoinAndSelect('follower.followsUser', 'followsUser')
+      .where('follower.user = :userId', { userId })
+      .getMany();
+  }
 
-// Get all following (users this user is following)
-async getFollowingByUserId(userId: number): Promise<Follower[]> {
-  const user = await this.userRepo.findOne({ where: { id: userId } });
-  if (!user) throw new NotFoundException('User not found');
-
-  return this.followerRepo
-    .createQueryBuilder('follower')
-    .leftJoinAndSelect('follower.user', 'user')           // The follower
-    .leftJoinAndSelect('follower.followsUser', 'followsUser') // The followed user
-    .where('follower.user = :userId', { userId })        // Important: filter by user
-    .getMany();
-}
-
-
-
-  // Update a follower relationship
+  // Update a follower relationship by ID
   async update(id: number, dto: UpdateFollowerDto): Promise<Follower> {
     const follower = await this.followerRepo.findOne({ where: { id } });
     if (!follower) throw new NotFoundException('Follower not found');
@@ -115,7 +104,7 @@ async getFollowingByUserId(userId: number): Promise<Follower[]> {
     return this.followerRepo.save(follower);
   }
 
-  // Remove a follower relationship
+  // Remove a follower relationship by ID
   async remove(id: number): Promise<void> {
     const follower = await this.followerRepo.findOne({ where: { id } });
     if (!follower) throw new NotFoundException('Follower not found');
@@ -123,6 +112,7 @@ async getFollowingByUserId(userId: number): Promise<Follower[]> {
     await this.followerRepo.remove(follower);
   }
 }
+
 
 
 

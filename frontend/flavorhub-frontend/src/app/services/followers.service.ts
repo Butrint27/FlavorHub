@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 
 export interface Follower {
   id: number;
-  user: any;          // you can replace `any` with your User model
-  followsUser: any;   // same here
+  user: any;          // Replace `any` with your User model if available
+  followsUser: any;   // Replace `any` with your User model if available
 }
 
 export interface CreateFollowerDto {
@@ -23,26 +23,26 @@ export interface UpdateFollowerDto {
 })
 export class FollowersService {
 
-  private readonly API_URL = 'http://localhost:3000/followers'; // ⬅️ Change if needed
+  private readonly API_URL = 'http://localhost:3000/followers'; // ⬅️ Update if needed
 
   constructor(private http: HttpClient) {}
 
-  // Get all followers
+  // Get all follower records (optional)
   getAll(): Observable<Follower[]> {
     return this.http.get<Follower[]>(this.API_URL);
   }
 
-  // Get follower by ID
-  getOne(id: number): Observable<Follower> {
-    return this.http.get<Follower>(`${this.API_URL}/${id}`);
+  // Get all follower records for a specific user (as the follower)
+  findByUserId(userId: number): Observable<Follower[]> {
+    return this.http.get<Follower[]>(`${this.API_URL}/user/${userId}`);
   }
 
-  // Get all followers for a specific user
+  // Get all followers of a user (users following this user)
   getFollowersByUserId(userId: number): Observable<Follower[]> {
     return this.http.get<Follower[]>(`${this.API_URL}/user/${userId}/followers`);
   }
 
-  // Get all following for a specific user
+  // Get all users this user is following
   getFollowingByUserId(userId: number): Observable<Follower[]> {
     return this.http.get<Follower[]>(`${this.API_URL}/user/${userId}/following`);
   }
@@ -62,3 +62,4 @@ export class FollowersService {
     return this.http.delete<void>(`${this.API_URL}/${id}`);
   }
 }
+

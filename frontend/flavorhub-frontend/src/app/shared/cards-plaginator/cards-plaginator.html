@@ -39,7 +39,11 @@
         </button>
 
         <!-- Follow Button -->
-        <button mat-button color="primary" (click)="toggleFollow(card, $event)">
+        <button mat-button 
+                [color]="card.followed ? 'primary' : ''" 
+                class="follow-btn"
+                (click)="toggleFollow(card, $event)">
+          <mat-icon *ngIf="card.followed" style="font-size:16px; margin-right:4px">check_circle</mat-icon>
           {{ card.followed ? 'Following' : 'Follow' }}
         </button>
       </mat-card-actions>
@@ -51,6 +55,7 @@
     <mat-icon>chevron_right</mat-icon>
   </button>
 </div>
+
 
 
 
