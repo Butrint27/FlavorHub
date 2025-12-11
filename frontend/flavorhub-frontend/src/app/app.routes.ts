@@ -23,7 +23,7 @@ export const routes: Routes = [
   },
   {
     path: 'main-page',
-    component: MainPage 
+    component: MainPage
   },
   {
     path: 'profile',
